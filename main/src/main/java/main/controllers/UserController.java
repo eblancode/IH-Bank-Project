@@ -1,7 +1,7 @@
 package main.controllers;
 
-import main.modules.users.Admin;
-import main.repositories.AdminRepository;
+import main.modules.users.User;
+import main.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/user")
+public class UserController {
     @Autowired
-    AdminRepository adminRepository;
+    UserRepository userRepository;
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<Admin> findAllAccountHolders() {
-        return adminRepository.findAll();
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 
 }

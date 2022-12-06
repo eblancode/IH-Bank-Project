@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/third-party")
+public class ThirdPartyController {
     @Autowired
     AdminRepository adminRepository;
 

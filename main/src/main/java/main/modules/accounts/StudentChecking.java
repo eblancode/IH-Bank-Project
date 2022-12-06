@@ -1,6 +1,12 @@
 package main.modules.accounts;
 
-public class StudentChecking extends Checking {
-    //no monthlyMaintenanceFee, minimumBalance
+import jakarta.persistence.Entity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Getter @Setter @NoArgsConstructor
+public class StudentChecking extends Account {
 
 }

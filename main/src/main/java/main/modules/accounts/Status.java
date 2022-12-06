@@ -1,6 +1,6 @@
 package main.modules.accounts;
 
 
-public enum CheckingStatus {
+public enum Status {
     FROZEN, ACTIVE
 }

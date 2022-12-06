@@ -1,11 +1,9 @@
 package main.repositories;
 
-
-import main.modules.accounts.Account;
+import main.modules.users.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long> {
-
+public interface AdminRepository extends JpaRepository<Admin, Long> {
 }
