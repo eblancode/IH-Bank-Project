@@ -19,7 +19,7 @@ public class AdminController {
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<Admin> findAllAccountHolders() {
+    public List<Admin> findAllAdmins() {
         return adminRepository.findAll();
     }
 

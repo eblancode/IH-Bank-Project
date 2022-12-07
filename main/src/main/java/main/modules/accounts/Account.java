@@ -1,21 +1,24 @@
 package main.modules.accounts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import main.modules.Transaction;
 import main.modules.users.AccountHolder;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-
 @Entity
+@DynamicUpdate // ok?
 @Inheritance(strategy = InheritanceType.JOINED)
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @ToString
 public abstract class Account {
     private static final BigDecimal PENALTY_FEE = new BigDecimal("40");
 
@@ -26,15 +29,16 @@ public abstract class Account {
     private BigDecimal balance;
     private String secretKey;
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status = Status.ACTIVE; // ok?
     /*@JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)*/
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate creationDate = LocalDate.now();
     @ManyToOne
-//    @JoinColumn(name = "primary_owner_id")
+    //@JoinColumn(name = "primary_owner_id")
     private AccountHolder primaryOwner;
     @ManyToOne
-//    @JoinColumn(name = "secondary_owner_id")
+    //@JoinColumn(name = "secondary_owner_id")
     private AccountHolder secondaryOwner;
     @OneToMany(mappedBy = "receiverAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
@@ -51,29 +55,47 @@ public abstract class Account {
         this.secondaryOwner = secondaryOwner;
     }
 
-    protected void checkBalance(BigDecimal balance) {
-        //savings necessario?
+    protected void checkAndGetBalance(BigDecimal balance) {
+
+    }
+
+    protected void checkAndSetBalance(BigDecimal balance) {
+        // Check Interests/Fees
+        if(this instanceof Savings ||
+                this instanceof Checking ||
+                this instanceof CreditCard) {
+            checkBalance(balance);
+        }
+        else this.setBalance(balance);
+    }
+
+    public void checkBalance(BigDecimal balance) {
         if(this instanceof Savings || this instanceof Checking) {
             if(this instanceof Savings savingsAccount) {
+                // Check/Apply penalty fee
                 if(savingsAccount.getMinimumBalance().compareTo(balance) < 0){
                     deductPenaltyFeeAndSetBalance(balance);
                 }
-                // if balance is set or checked, run checkInterestRate
+                // Check/Apply interest rate
                 if (savingsAccount.getLastDateInterestRateApplied()!=null) {
                     savingsAccount.checkInterestRate(balance);
                 }
                 return;
             }
-            else if (this instanceof Checking checkingAccount) { //todo
-                /* if (checkingAccount.compareTo(balance) < 0) {
-                    deductPenaltyFee(balance);
-                }*/
+            else if (this instanceof Checking checkingAccount) { //todo EXTRA
+                // Check/Apply penalty fee
+                if(checkingAccount.getMinimumBalance().compareTo(balance) < 0){
+                    deductPenaltyFeeAndSetBalance(balance);
+                }
                 return;
             }
         }
-        if (this instanceof CreditCard) return; //todo
-
-        this.setBalance(balance);
+        else if (this instanceof CreditCard creditCard) {
+            // Check/Apply interest rate
+            if (creditCard.getLastDateInterestRateApplied()!=null) {
+                creditCard.checkInterestRate(balance);
+            }
+        }
     }
 
     private void deductPenaltyFeeAndSetBalance(BigDecimal balance) {

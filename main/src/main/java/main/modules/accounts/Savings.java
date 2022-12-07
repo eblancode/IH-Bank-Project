@@ -16,16 +16,28 @@ import java.time.Period;
 @Entity
 @Getter @Setter @NoArgsConstructor
 public class Savings extends Account {
-    @Max(1000) // aplicar validacion en dto y en setter de misma clase
+    @Max(1000) // Aplicar validacion en dto y en setter de misma clase
     @Min(100)
     private BigDecimal minimumBalance = new BigDecimal("1000");
     @DecimalMax("0.5")
     private double interestRate = 0.0025; //double ok?
     private LocalDate lastDateInterestRateApplied = null;
 
+    public Savings(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
+        super(balance, secretKey, status, primaryOwner, secondaryOwner);
+        // minimumBalance and interestRate have default values
+    }
+
     public Savings(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal minimumBalance) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
         this.minimumBalance = minimumBalance;
+        // interestRate has default values
+    }
+
+    public Savings(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, double interestRate) {
+        super(balance, secretKey, status, primaryOwner, secondaryOwner);
+        this.interestRate = interestRate;
+        // minimumBalance has default values
     }
 
     public Savings(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal minimumBalance, double interestRate) {

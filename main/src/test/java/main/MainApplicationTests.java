@@ -10,4 +10,6 @@ class MainApplicationTests {
 	void contextLoads() {
 	}
 
+	// Test interest rates applied
+
 }

@@ -12,6 +12,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Getter @Setter @NoArgsConstructor
@@ -26,16 +27,19 @@ public class CreditCard extends Account {
 
     public CreditCard(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
+        // creditLimit and interestRate have default values
     }
 
     public CreditCard(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal creditLimit) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
         this.creditLimit = creditLimit; // check it is < 100000 && > 100
+        // interestRate has default values
     }
 
     public CreditCard(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, double interestRate) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
         this.interestRate = interestRate; // check it is < 0.2 && > 0.1 ?
+        // creditLimit has default values
     }
 
     public CreditCard(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal creditLimit, double interestRate) {
@@ -44,12 +48,23 @@ public class CreditCard extends Account {
         this.interestRate = interestRate;
     }
 
-    protected void checkInterestRate() {
-
+    protected void checkInterestRate(BigDecimal balance) {
+        if(Period.between(this.getLastDateInterestRateApplied(),
+                LocalDate.now()).getMonths() >= 1) { // CHECK IF OK
+            this.addInterestRateAndSetBalance(balance);
+        }
+        else {
+            this.setBalance(balance);
+        }
     }
 
-    protected void addInterestRate() {
+    private void addInterestRateAndSetBalance(BigDecimal balance) {
+        BigDecimal calculatedAmount = balance // CHECK IF OK
+                .multiply(BigDecimal.valueOf(this.interestRate))
+                .multiply(BigDecimal.valueOf(Period.between(this.getLastDateInterestRateApplied(),
+                        LocalDate.now()).getMonths()));
 
+        this.setBalance(balance.add(calculatedAmount));
     }
 
 }
