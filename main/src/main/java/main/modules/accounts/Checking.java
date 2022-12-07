@@ -23,4 +23,5 @@ public class Checking extends Account {
         this.monthlyMaintenanceFee = monthlyMaintenanceFee;
     }
 
+    //TODO: CHECK CONSTRAINTS IN SET METHODS
 }

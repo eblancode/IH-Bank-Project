@@ -1,7 +1,7 @@
-package main.services;
+package main.services.accounts;
 
 import main.modules.accounts.Account;
-import main.repositories.AccountRepository;
+import main.repositories.accounts.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

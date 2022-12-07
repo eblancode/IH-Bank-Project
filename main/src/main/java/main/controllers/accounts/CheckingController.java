@@ -1,8 +1,8 @@
-package main.controllers;
+package main.controllers.accounts;
 
 import main.modules.accounts.Checking;
-import main.repositories.CheckingRepository;
-import main.services.CheckingService;
+import main.repositories.accounts.CheckingRepository;
+import main.services.accounts.CheckingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,6 @@ public class CheckingController {
     @ResponseStatus(HttpStatus.OK)
     public List<Checking> findAllCheckingAccounts() {
         return checkingService.findAllCheckingAccounts();
-//        return checkingRepository.findAll();
     }
 
     @PostMapping("/add")

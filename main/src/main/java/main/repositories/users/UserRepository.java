@@ -1,4 +1,4 @@
-package main.repositories;
+package main.repositories.users;
 
 
 import main.modules.users.User;

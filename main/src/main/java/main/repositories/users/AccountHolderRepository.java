@@ -1,4 +1,4 @@
-package main.repositories;
+package main.repositories.users;
 
 import main.modules.users.AccountHolder;
 import org.springframework.data.jpa.repository.JpaRepository;

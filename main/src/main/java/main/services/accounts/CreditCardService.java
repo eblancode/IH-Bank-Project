@@ -1,7 +1,7 @@
-package main.services;
+package main.services.accounts;
 
 import main.modules.accounts.CreditCard;
-import main.repositories.CreditCardRepository;
+import main.repositories.accounts.CreditCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

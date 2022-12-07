@@ -1,4 +1,4 @@
-package main.repositories;
+package main.repositories.accounts;
 
 import main.modules.accounts.Savings;
 import org.springframework.data.jpa.repository.JpaRepository;

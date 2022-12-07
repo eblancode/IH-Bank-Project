@@ -1,9 +1,9 @@
-package main.controllers;
+package main.controllers.users;
 
 import main.modules.users.AccountHolder;
 import main.modules.users.User;
-import main.repositories.AccountHolderRepository;
-import main.services.AccountHolderService;
+import main.repositories.users.AccountHolderRepository;
+import main.services.users.AccountHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

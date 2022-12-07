@@ -23,6 +23,8 @@ public class Savings extends Account {
     private double interestRate = 0.0025; //double ok?
     private LocalDate lastDateInterestRateApplied = null;
 
+    //TODO: CHECK CONSTRAINTS IN SET METHODS
+
     public Savings(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
         // minimumBalance and interestRate have default values
@@ -62,6 +64,7 @@ public class Savings extends Account {
                 .multiply(BigDecimal.valueOf(Period.between(this.getLastDateInterestRateApplied(),
                         LocalDate.now()).getYears()));
 
+        this.setLastDateInterestRateApplied(LocalDate.now());
         this.setBalance(balance.add(calculatedAmount));
     }
 

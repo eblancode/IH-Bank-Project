@@ -5,7 +5,9 @@ import main.modules.embedded.Address;
 import main.modules.users.AccountHolder;
 import main.modules.users.Admin;
 import main.modules.users.User;
-import main.repositories.*;
+import main.repositories.accounts.*;
+import main.repositories.users.AccountHolderRepository;
+import main.repositories.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,14 +20,12 @@ import java.util.List;
 
 @SpringBootApplication
 public class MainApplication implements CommandLineRunner {
-	/*@Autowired
-	AccountRepository accountRepository;
 	@Autowired
-	UserRepository userRepository;*/
+	UserRepository userRepository;
 	@Autowired
 	AccountHolderRepository accountHolderRepository;
 	@Autowired
-	UserRepository userRepository;
+	AccountRepository accountRepository;
 	@Autowired
 	CreditCardRepository creditCardRepository;
 	@Autowired
@@ -72,10 +72,11 @@ public class MainApplication implements CommandLineRunner {
 
 		userRepository.save(admin);
 		accountHolderRepository.saveAll(List.of(ah,ah1,ah2,ah3,ah4));
-		checkingRepository.saveAll(List.of(chk,chk1,chk2));
+		accountRepository.saveAll(List.of(chk,chk1,chk2,cd,cd1,sa,sa1,st,st1));
+		/*checkingRepository.saveAll(List.of(chk,chk1,chk2));
 		creditCardRepository.saveAll(List.of(cd,cd1));
 		savingsRepository.saveAll(List.of(sa,sa1));
-		studentCheckingRepository.saveAll(List.of(st,st1));
+		studentCheckingRepository.saveAll(List.of(st,st1));*/
 		//passwordEncoder.encode("1234")
 		//create role
 		//roleRepository.save(new Role("CONTRIBUTOR", author1));

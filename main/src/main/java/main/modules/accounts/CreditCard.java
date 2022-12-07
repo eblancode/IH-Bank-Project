@@ -25,6 +25,8 @@ public class CreditCard extends Account {
     private double interestRate = 0.2; //double ok?
     private LocalDate lastDateInterestRateApplied = null;
 
+    //TODO: CHECK CONSTRAINTS IN SET METHODS
+
     public CreditCard(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
         // creditLimit and interestRate have default values
@@ -64,6 +66,7 @@ public class CreditCard extends Account {
                 .multiply(BigDecimal.valueOf(Period.between(this.getLastDateInterestRateApplied(),
                         LocalDate.now()).getMonths()));
 
+        this.setLastDateInterestRateApplied(LocalDate.now());
         this.setBalance(balance.add(calculatedAmount));
     }
 

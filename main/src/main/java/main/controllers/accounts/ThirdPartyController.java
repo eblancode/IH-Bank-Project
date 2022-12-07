@@ -1,7 +1,7 @@
-package main.controllers;
+package main.controllers.accounts;
 
 import main.modules.users.Admin;
-import main.repositories.AdminRepository;
+import main.repositories.users.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/third-party")
+public class ThirdPartyController {
     @Autowired
     AdminRepository adminRepository;
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<Admin> findAllAdmins() {
+    public List<Admin> findAllAccountHolders() {
         return adminRepository.findAll();
     }
 

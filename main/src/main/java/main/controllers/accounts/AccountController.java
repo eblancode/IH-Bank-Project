@@ -1,9 +1,9 @@
-package main.controllers;
+package main.controllers.accounts;
 
 import main.modules.accounts.Account;
 import main.modules.accounts.Status;
-import main.repositories.AccountRepository;
-import main.services.AccountService;
+import main.repositories.accounts.AccountRepository;
+import main.services.accounts.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,18 +18,21 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
+    // GET ALL ACCOUNTS
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public List<Account> getAllAccounts() {
         return accountService.findAllAccounts();
     }
 
+    // GET ACCOUNT BY ID
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Account getAccountHolder(@PathVariable Long id) {
         return accountService.findAccount(id);
     }
 
+    // DELETE ACCOUNT BY ID
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteAccount(@PathVariable Long id) {
@@ -37,17 +40,17 @@ public class AccountController {
         accountService.deleteAccount(id);
     }
 
+    // UPDATE ACCOUNT BY ID AND PUT
     @PutMapping("/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Account updateAccount(@PathVariable Long id, @RequestBody Account account){
         return accountService.updateAccount(id,account);
     }
 
+    // UPDATE ACCOUNT BY REQUESTBODY
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Account updateUser(@RequestBody Account account) {
-        /*if(userService.findUser(user.getId()).isPresent()) {
-        }*/
         if(accountRepository.findById(account.getId()).isPresent()) {
             return accountRepository.save(account);
         }

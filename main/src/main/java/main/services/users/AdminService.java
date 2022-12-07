@@ -1,8 +1,8 @@
-package main.services;
+package main.services.users;
 
 import main.modules.users.AccountHolder;
 import main.modules.users.User;
-import main.repositories.AccountHolderRepository;
+import main.repositories.users.AccountHolderRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 

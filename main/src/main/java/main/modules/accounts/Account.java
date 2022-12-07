@@ -55,8 +55,13 @@ public abstract class Account {
         this.secondaryOwner = secondaryOwner;
     }
 
-    protected void checkAndGetBalance(BigDecimal balance) {
-
+    protected BigDecimal checkAndGetBalance(BigDecimal balance) {
+        if(this instanceof Savings ||
+                this instanceof Checking ||
+                this instanceof CreditCard) {
+            checkBalance(balance);
+        }
+        return this.getBalance();
     }
 
     protected void checkAndSetBalance(BigDecimal balance) {
@@ -64,7 +69,7 @@ public abstract class Account {
         if(this instanceof Savings ||
                 this instanceof Checking ||
                 this instanceof CreditCard) {
-            checkBalance(balance);
+            checkBalance(balance); //todo: EXTRA not needed to check penalthy deduction
         }
         else this.setBalance(balance);
     }
@@ -80,14 +85,14 @@ public abstract class Account {
                 if (savingsAccount.getLastDateInterestRateApplied()!=null) {
                     savingsAccount.checkInterestRate(balance);
                 }
-                return;
+                //return;
             }
-            else if (this instanceof Checking checkingAccount) { //todo EXTRA
+            else if (this instanceof Checking checkingAccount) { //todo: Done for Aliases, OK?
                 // Check/Apply penalty fee
                 if(checkingAccount.getMinimumBalance().compareTo(balance) < 0){
                     deductPenaltyFeeAndSetBalance(balance);
                 }
-                return;
+                //return;
             }
         }
         else if (this instanceof CreditCard creditCard) {

@@ -1,7 +1,7 @@
-package main.controllers;
+package main.controllers.accounts;
 
 import main.modules.accounts.CreditCard;
-import main.services.CreditCardService;
+import main.services.accounts.CreditCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
