@@ -1,5 +1,6 @@
 package main.controllers.accounts;
 
+import main.modules.accounts.Account;
 import main.modules.accounts.Checking;
 import main.repositories.accounts.CheckingRepository;
 import main.services.accounts.CheckingService;
@@ -23,10 +24,16 @@ public class CheckingController {
         return checkingService.findAllCheckingAccounts();
     }
 
-    @PostMapping("/add")
+    /*@PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public Checking createCheckingAccount(@RequestBody Checking account){
         return checkingRepository.save(account);
+    }*/
+
+    @PostMapping("/add")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Account createCheckingAccount(@RequestBody Checking account){
+        return checkingService.createCheckingAccount(account);
     }
 
 }

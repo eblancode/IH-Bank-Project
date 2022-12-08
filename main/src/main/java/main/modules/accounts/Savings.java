@@ -7,8 +7,7 @@ import lombok.Setter;
 import main.modules.users.AccountHolder;
 
 import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
@@ -20,8 +19,8 @@ public class Savings extends Account {
     private static final BigDecimal maxMinimumBalance = BigDecimal.valueOf(1000);
     private static final double maxInterestRate = 0.5;
 
-    @Min(100)
-    @Max(1000) // Aplicar validacion en dto y en setter de misma clase
+    @DecimalMin("100")
+    @DecimalMax("1000") // Aplicar validacion en dto y en setter de misma clase
     private BigDecimal minimumBalance = new BigDecimal("1000");
     @DecimalMax("0.5")
     private double interestRate = 0.0025; //double ok?

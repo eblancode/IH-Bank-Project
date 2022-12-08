@@ -8,8 +8,6 @@ import main.modules.users.AccountHolder;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
@@ -22,8 +20,8 @@ public class CreditCard extends Account {
     private static final double minInterestRate = 0.1;
     private static final double maxInterestRate = 0.2;
 
-    @Max(100000)
-    @Min(100)
+    @DecimalMax("100000")
+    @DecimalMin("100")
     private BigDecimal creditLimit = new BigDecimal("100");
     @DecimalMax("0.2")
     @DecimalMin("0.1")
