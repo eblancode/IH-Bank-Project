@@ -55,7 +55,7 @@ public abstract class Account {
         this.secondaryOwner = secondaryOwner;
     }
 
-    protected BigDecimal checkAndGetBalance(BigDecimal balance) {
+    public BigDecimal checkAndGetBalance(BigDecimal balance) {
         if(this instanceof Savings ||
                 this instanceof Checking ||
                 this instanceof CreditCard) {
@@ -64,35 +64,35 @@ public abstract class Account {
         return this.getBalance();
     }
 
-    protected void checkAndSetBalance(BigDecimal balance) {
+    public void checkAndSetBalance(BigDecimal balance) {
         // Check Interests/Fees
         if(this instanceof Savings ||
                 this instanceof Checking ||
                 this instanceof CreditCard) {
-            checkBalance(balance); //todo: EXTRA not needed to check penalthy deduction
+            checkBalance(balance); //todo: EXTRA not needed to check penalty deduction
         }
         else this.setBalance(balance);
     }
 
-    public void checkBalance(BigDecimal balance) {
+    private void checkBalance(BigDecimal balance) {
         if(this instanceof Savings || this instanceof Checking) {
+            StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+
             if(this instanceof Savings savingsAccount) {
                 // Check/Apply penalty fee
-                if(savingsAccount.getMinimumBalance().compareTo(balance) < 0){
+                if(savingsAccount.getMinimumBalance().compareTo(balance) > 0){
                     deductPenaltyFeeAndSetBalance(balance);
                 }
                 // Check/Apply interest rate
                 if (savingsAccount.getLastDateInterestRateApplied()!=null) {
                     savingsAccount.checkInterestRate(balance);
                 }
-                //return;
             }
             else if (this instanceof Checking checkingAccount) { //todo: Done for Aliases, OK?
                 // Check/Apply penalty fee
-                if(checkingAccount.getMinimumBalance().compareTo(balance) < 0){
+                if(checkingAccount.getMinimumBalance().compareTo(balance) > 0){
                     deductPenaltyFeeAndSetBalance(balance);
                 }
-                //return;
             }
         }
         else if (this instanceof CreditCard creditCard) {

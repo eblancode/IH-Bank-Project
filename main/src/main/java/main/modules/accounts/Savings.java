@@ -16,8 +16,12 @@ import java.time.Period;
 @Entity
 @Getter @Setter @NoArgsConstructor
 public class Savings extends Account {
-    @Max(1000) // Aplicar validacion en dto y en setter de misma clase
+    private static final BigDecimal minMinimumBalance = BigDecimal.valueOf(250);
+    private static final BigDecimal maxMinimumBalance = BigDecimal.valueOf(1000);
+    private static final double maxInterestRate = 0.5;
+
     @Min(100)
+    @Max(1000) // Aplicar validacion en dto y en setter de misma clase
     private BigDecimal minimumBalance = new BigDecimal("1000");
     @DecimalMax("0.5")
     private double interestRate = 0.0025; //double ok?
@@ -45,7 +49,22 @@ public class Savings extends Account {
     public Savings(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal minimumBalance, double interestRate) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
         this.minimumBalance = minimumBalance;
-        this.interestRate = interestRate; //check it is < 0.5 ?
+        this.interestRate = interestRate;
+    }
+
+    public void instantiateMinimumBalance(BigDecimal minimumBalance) {
+        if(minimumBalance.compareTo(minMinimumBalance)<0||minimumBalance.compareTo(maxMinimumBalance)>0) {
+            if(minimumBalance.compareTo(minMinimumBalance)<0) this.minimumBalance = minMinimumBalance;
+            else this.minimumBalance = maxMinimumBalance;
+            System.out.println("Minimum balance for Savings got a default value due to constraints");
+        }
+        else this.minimumBalance = minimumBalance;
+    }
+
+    public void instantiateInterestRate(double interestRate) {
+        this.interestRate = Math.min(interestRate, maxInterestRate);
+        if(this.interestRate==maxInterestRate)
+            System.out.println("Interest rate for Savings is set to a maximum value");
     }
 
     protected void checkInterestRate(BigDecimal balance) {

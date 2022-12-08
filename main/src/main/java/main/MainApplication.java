@@ -70,6 +70,10 @@ public class MainApplication implements CommandLineRunner {
 		StudentChecking st = new StudentChecking(BigDecimal.valueOf(200),"secretkey213",Status.FROZEN,ah,ah1);
 		StudentChecking st1 = new StudentChecking(BigDecimal.valueOf(200),"secretkey213",Status.FROZEN,ah2,ah3);
 
+		sa.checkAndSetBalance(sa.getBalance().add(BigDecimal.valueOf(200)));
+		chk.checkAndSetBalance(sa.getBalance().add(BigDecimal.valueOf(200)));
+		chk1.checkAndSetBalance(sa.getBalance().subtract(BigDecimal.valueOf(751)));
+
 		userRepository.save(admin);
 		accountHolderRepository.saveAll(List.of(ah,ah1,ah2,ah3,ah4));
 		accountRepository.saveAll(List.of(chk,chk1,chk2,cd,cd1,sa,sa1,st,st1));
