@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 public class Checking extends Account {
     /*private static final BigDecimal minMinimumBalance = BigDecimal.valueOf(250);
     private static final BigDecimal minMMF = BigDecimal.valueOf(12);*/
-    @DecimalMin("250")
+    @DecimalMin("250") //todo: do it static final? (needed in the db?)
     @DecimalMax("250")
     private final BigDecimal minimumBalance = BigDecimal.valueOf(250);
     @DecimalMin("12")

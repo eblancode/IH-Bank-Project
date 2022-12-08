@@ -12,7 +12,7 @@ public class AdminService {
     AccountHolderRepository accountHolderRepository;
 
     public List<User> getAllUsers(String userName) {
-        AccountHolder accountHolder = accountHolderRepository.findByName(userName)
+        AccountHolder accountHolder = accountHolderRepository.findByUserName(userName)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         return null;
     }

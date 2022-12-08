@@ -15,9 +15,9 @@ import java.time.Period;
 @Entity
 @Getter @Setter @NoArgsConstructor
 public class Savings extends Account {
-    private static final BigDecimal minMinimumBalance = BigDecimal.valueOf(250);
-    private static final BigDecimal maxMinimumBalance = BigDecimal.valueOf(1000);
-    private static final double maxInterestRate = 0.5;
+    private static final BigDecimal MIN_MINIMUM_BALANCE = BigDecimal.valueOf(100);
+    private static final BigDecimal MAX_MINIMUM_BALANCE = BigDecimal.valueOf(1000);
+    private static final double MAX_INTEREST_RATE = 0.5;
 
     @DecimalMin("100")
     @DecimalMax("1000") // Aplicar validacion en dto y en setter de misma clase
@@ -35,54 +35,59 @@ public class Savings extends Account {
 
     public Savings(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal minimumBalance) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
-        this.minimumBalance = minimumBalance;
+        instantiateMinimumBalance(minimumBalance);
         // interestRate has default values
     }
 
     public Savings(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, double interestRate) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
-        this.interestRate = interestRate;
+        instantiateInterestRate(interestRate);
         // minimumBalance has default values
     }
 
     public Savings(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal minimumBalance, double interestRate) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
-        this.minimumBalance = minimumBalance;
-        this.interestRate = interestRate;
+        instantiateMinimumBalance(minimumBalance);
+        instantiateInterestRate(interestRate);
     }
 
+    /*Called in constructor, checks if the value is in between minimum and maximum allowed values.
+    If the value provided is not in the range then sets it to the minimum/maximum value accordingly*/
     public void instantiateMinimumBalance(BigDecimal minimumBalance) {
-        if(minimumBalance.compareTo(minMinimumBalance)<0||minimumBalance.compareTo(maxMinimumBalance)>0) {
-            if(minimumBalance.compareTo(minMinimumBalance)<0) this.minimumBalance = minMinimumBalance;
-            else this.minimumBalance = maxMinimumBalance;
+        if(minimumBalance.compareTo(MIN_MINIMUM_BALANCE)<0||minimumBalance.compareTo(MAX_MINIMUM_BALANCE)>0) {
+            if(minimumBalance.compareTo(MIN_MINIMUM_BALANCE)<0) this.setMinimumBalance(MIN_MINIMUM_BALANCE);
+            else this.setMinimumBalance(MAX_MINIMUM_BALANCE);
             System.out.println("Minimum balance for Savings got a default value due to constraints");
         }
-        else this.minimumBalance = minimumBalance;
+        else this.setMinimumBalance(minimumBalance);
     }
 
+    /*Called in constructor, checks if the value is lower than the maximum allowed.
+    If the value provided is not in lower, then it sets to the maximum value*/
     public void instantiateInterestRate(double interestRate) {
-        this.interestRate = Math.min(interestRate, maxInterestRate);
-        if(this.interestRate==maxInterestRate)
+        this.interestRate = Math.min(interestRate, MAX_INTEREST_RATE);
+        if(this.interestRate==MAX_INTEREST_RATE)
             System.out.println("Interest rate for Savings is set to a maximum value");
     }
 
     protected void checkInterestRate(BigDecimal balance) {
-        if(Period.between(this.getLastDateInterestRateApplied(),
-                LocalDate.now()).getYears() >= 1) { // CHECK IF OK
-            this.addInterestRateAndSetBalance(balance);
+        LocalDate now = LocalDate.now();
+        int yearsDifference = Period.between(this.getLastDateInterestRateApplied(),
+                now).getYears();
+        if(yearsDifference >= 1) { // CHECK IF OK
+            addInterestRateAndSetBalance(balance,yearsDifference,now);
         }
         else {
             this.setBalance(balance);
         }
     }
 
-    protected void addInterestRateAndSetBalance(BigDecimal balance) {
+    protected void addInterestRateAndSetBalance(BigDecimal balance, int yearsDifference, LocalDate now) {
         BigDecimal calculatedAmount = balance // CHECK IF OK
                 .multiply(BigDecimal.valueOf(this.interestRate))
-                .multiply(BigDecimal.valueOf(Period.between(this.getLastDateInterestRateApplied(),
-                        LocalDate.now()).getYears()));
+                .multiply(BigDecimal.valueOf(yearsDifference));
 
-        this.setLastDateInterestRateApplied(LocalDate.now());
+        this.setLastDateInterestRateApplied(now);
         this.setBalance(balance.add(calculatedAmount));
     }
 

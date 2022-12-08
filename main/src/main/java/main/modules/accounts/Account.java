@@ -13,6 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -42,10 +43,10 @@ public abstract class Account {
     private AccountHolder secondaryOwner;
     @OneToMany(mappedBy = "receiverAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Transaction> inboundTransactionList;
+    private List<Transaction> inboundTransactionList = new ArrayList<>();
     @OneToMany(mappedBy = "senderAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Transaction> outboundTransactionList;
+    private List<Transaction> outboundTransactionList = new ArrayList<>();
 
     public Account(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         this.balance = balance;
@@ -55,11 +56,11 @@ public abstract class Account {
         this.secondaryOwner = secondaryOwner;
     }
 
-    public BigDecimal checkAndGetBalance(BigDecimal balance) {
+    public BigDecimal checkAndGetBalance() {
         if(this instanceof Savings ||
                 this instanceof Checking ||
                 this instanceof CreditCard) {
-            checkBalance(balance);
+            checkBalance(this.getBalance());
         }
         return this.getBalance();
     }
@@ -69,30 +70,30 @@ public abstract class Account {
         if(this instanceof Savings ||
                 this instanceof Checking ||
                 this instanceof CreditCard) {
-            checkBalance(balance); //todo: EXTRA not needed to check penalty deduction
+            checkBalance(balance);
         }
         else this.setBalance(balance);
     }
 
     private void checkBalance(BigDecimal balance) {
         if(this instanceof Savings || this instanceof Checking) {
-            StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-
             if(this instanceof Savings savingsAccount) {
-                // Check/Apply penalty fee
-                if(savingsAccount.getMinimumBalance().compareTo(balance) > 0){
-                    deductPenaltyFeeAndSetBalance(balance);
-                }
+                // Check/Apply penalty fee if balance is due to change
+                if(!Thread.currentThread().getStackTrace()[2].getMethodName().equals("checkAndGetBalance"))
+                    if(savingsAccount.getMinimumBalance().compareTo(balance) > 0){
+                        deductPenaltyFeeAndSetBalance(balance);
+                    }
                 // Check/Apply interest rate
                 if (savingsAccount.getLastDateInterestRateApplied()!=null) {
                     savingsAccount.checkInterestRate(balance);
                 }
             }
             else if (this instanceof Checking checkingAccount) { //todo: Done for Aliases, OK?
-                // Check/Apply penalty fee
-                if(checkingAccount.getMinimumBalance().compareTo(balance) > 0){
-                    deductPenaltyFeeAndSetBalance(balance);
-                }
+                // Check/Apply penalty fee if balance is due to change
+                if(!Thread.currentThread().getStackTrace()[2].getMethodName().equals("checkAndGetBalance"))
+                    if(checkingAccount.getMinimumBalance().compareTo(balance) > 0){
+                        deductPenaltyFeeAndSetBalance(balance);
+                    }
             }
         }
         else if (this instanceof CreditCard creditCard) {
@@ -105,6 +106,22 @@ public abstract class Account {
 
     private void deductPenaltyFeeAndSetBalance(BigDecimal balance) {
         this.setBalance(balance.subtract(PENALTY_FEE));
+    }
+
+    public void setPrimaryOwner(AccountHolder primaryOwner) {
+        this.primaryOwner = primaryOwner;
+    }
+
+    public void setSecondaryOwner(AccountHolder secondaryOwner) {
+        this.secondaryOwner = secondaryOwner;
+    }
+
+    public void addInboundTransactionList(Transaction inboundTransactionList) {
+        this.inboundTransactionList.add(inboundTransactionList);
+    }
+
+    public void addOutboundTransactionList(Transaction outboundTransactionList) {
+        this.inboundTransactionList.add(outboundTransactionList);
     }
 
 }

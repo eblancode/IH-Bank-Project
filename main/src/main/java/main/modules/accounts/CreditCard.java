@@ -15,10 +15,10 @@ import java.time.Period;
 @Entity
 @Getter @Setter @NoArgsConstructor
 public class CreditCard extends Account {
-    private static final BigDecimal minCreditLimit = BigDecimal.valueOf(100);
-    private static final BigDecimal maxCreditLimit = BigDecimal.valueOf(100000);
-    private static final double minInterestRate = 0.1;
-    private static final double maxInterestRate = 0.2;
+    private static final BigDecimal MIN_CREDIT_LIMIT = BigDecimal.valueOf(100);
+    private static final BigDecimal MAX_CREDIT_LIMIT = BigDecimal.valueOf(100000);
+    private static final double MIN_INTEREST_RATE = 0.1;
+    private static final double MAX_INTEREST_RATE = 0.2;
 
     @DecimalMax("100000")
     @DecimalMin("100")
@@ -37,14 +37,12 @@ public class CreditCard extends Account {
 
     public CreditCard(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal creditLimit) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
-//        this.creditLimit = creditLimit;
         instantiateCreditLimit(creditLimit);
         // interestRate has default values
     }
 
     public CreditCard(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, double interestRate) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
-//        this.interestRate = interestRate;
         instantiateInterestRate(interestRate);
         // creditLimit has default values
     }
@@ -57,47 +55,49 @@ public class CreditCard extends Account {
         this.interestRate = interestRate;*/
     }
 
-    @Override
+    /*@Override
     public void setBalance(BigDecimal balance) {
         super.setBalance(balance);
-    }
+    }*/
 
     public void instantiateCreditLimit(BigDecimal creditLimit) {
-        if(creditLimit.compareTo(minCreditLimit)<0||creditLimit.compareTo(maxCreditLimit)>0) {
-            if(creditLimit.compareTo(minCreditLimit)<0) setCreditLimit(minCreditLimit);
-            else setCreditLimit(maxCreditLimit);
+        if(creditLimit.compareTo(MIN_CREDIT_LIMIT)<0||creditLimit.compareTo(MAX_CREDIT_LIMIT)>0) {
+            if(creditLimit.compareTo(MIN_CREDIT_LIMIT)<0) setCreditLimit(MIN_CREDIT_LIMIT);
+            else setCreditLimit(MAX_CREDIT_LIMIT);
             System.out.println("Credit Limit for Credit Card got a default value due to constraints");
         }
         else setCreditLimit(creditLimit);
     }
 
     public void instantiateInterestRate(double interestRate) {
-        if (interestRate<minInterestRate||interestRate>maxInterestRate) {
-            if(interestRate<minInterestRate) /*this.interestRate = minInterestRate;*/
-                setInterestRate(minInterestRate);
-            else /*this.interestRate = maxInterestRate;*/setInterestRate(maxInterestRate);
+        if (interestRate<MIN_INTEREST_RATE||interestRate>MAX_INTEREST_RATE) {
+            if(interestRate<MIN_INTEREST_RATE)
+                this.setInterestRate(MIN_INTEREST_RATE); //todo: check if this. necessary?
+            else this.setInterestRate(MAX_INTEREST_RATE);
             System.out.println("Interest rate for Credit Card got a default value due to constraints");
         }
-        else /*this.interestRate = interestRate;*/setInterestRate(interestRate);
+        else this.setInterestRate(interestRate);
     }
 
     protected void checkInterestRate(BigDecimal balance) {
-        if(Period.between(this.getLastDateInterestRateApplied(),
-                LocalDate.now()).getMonths() >= 1) { // CHECK IF OK
-            this.addInterestRateAndSetBalance(balance);
+        LocalDate now = LocalDate.now();
+        int monthsDifference = Period.between(this.getLastDateInterestRateApplied(),
+                now).getMonths();
+        if(monthsDifference >= 1) { // CHECK IF OK
+            addInterestRateAndSetBalance(balance,monthsDifference,now);
         }
         else {
             this.setBalance(balance);
         }
     }
 
-    private void addInterestRateAndSetBalance(BigDecimal balance) {
+    private void addInterestRateAndSetBalance(BigDecimal balance, int monthsDifference, LocalDate now) {
+        double monthlyInterest = interestRate/12;
         BigDecimal calculatedAmount = balance // CHECK IF OK
-                .multiply(BigDecimal.valueOf(this.interestRate))
-                .multiply(BigDecimal.valueOf(Period.between(this.getLastDateInterestRateApplied(),
-                        LocalDate.now()).getMonths()));
+                .multiply(BigDecimal.valueOf(monthlyInterest))
+                .multiply(BigDecimal.valueOf(monthsDifference));
 
-        this.setLastDateInterestRateApplied(LocalDate.now());
+        this.setLastDateInterestRateApplied(now);
         this.setBalance(balance.add(calculatedAmount));
     }
 

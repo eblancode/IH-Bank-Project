@@ -60,7 +60,7 @@ public class UserController {
     public User updateStatus(@PathVariable Long id, @RequestParam String name){
         if(userRepository.findById(id).isPresent()){
             User user = userRepository.findById(id).get();
-            user.setName(name);
+//            user.setName(name);
             return userRepository.save(user);
         }
         return null;

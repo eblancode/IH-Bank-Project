@@ -15,10 +15,10 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    private String name;
+    private String userName;
 
     public User(String name) {
-        this.name = name;
+        this.userName = name;
     }
 
 }

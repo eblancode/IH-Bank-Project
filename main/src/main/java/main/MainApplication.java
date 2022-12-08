@@ -41,6 +41,9 @@ public class MainApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		// TO APPLY SPECIFIED FUNCTIONALITIES ALL ACCOUNTS SHOULD CALL
+		// checkAndGetBalance/checkAndSetBalance RESPECTIVELY RATHER THAN REGULAR
+		// getBalance/setBalance
 		List<Account> accountList = new ArrayList<>();
 		List<User> userList = new ArrayList<>();
 
@@ -57,30 +60,28 @@ public class MainApplication implements CommandLineRunner {
 		AccountHolder ah3 = new AccountHolder("Holder C", LocalDate.of(2002,01,01),addr3);
 		AccountHolder ah4 = new AccountHolder("Hodler", LocalDate.of(1899,01,01),addr3);
 
-		Checking chk = new Checking(BigDecimal.valueOf(2000),"secretkey123",Status.ACTIVE,ah,ah1,BigDecimal.valueOf(300),BigDecimal.valueOf(12));
-		Checking chk1 = new Checking(BigDecimal.valueOf(1000),"secretkey321",Status.ACTIVE,ah,ah1,BigDecimal.valueOf(250),BigDecimal.valueOf(12));
-		Checking chk2 = new Checking(BigDecimal.valueOf(1500),"secretkey213",Status.FROZEN,ah,ah1,BigDecimal.valueOf(250),BigDecimal.valueOf(12));
+		Checking chk = new Checking(BigDecimal.valueOf(2000),"secretkey123",Status.ACTIVE,ah,ah1);
+		Checking chk1 = new Checking(BigDecimal.valueOf(1000),"secretkey321",Status.ACTIVE,ah,ah1);
+		Checking chk2 = new Checking(BigDecimal.valueOf(1500),"secretkey213",Status.FROZEN,ah,ah1);
 
-		CreditCard cd = new CreditCard(BigDecimal.valueOf(200),"secretkey213",Status.FROZEN,ah,ah1);
+		CreditCard cd = new CreditCard(BigDecimal.valueOf(200),"secretkey213",Status.ACTIVE,ah,ah1);
 		CreditCard cd1 = new CreditCard(BigDecimal.valueOf(200),"secretkey213",Status.FROZEN,ah,ah1,BigDecimal.valueOf(250),0.2);
 
-		Savings sa = new Savings(BigDecimal.valueOf(200),"secretkey213",Status.FROZEN,ah,ah3,BigDecimal.valueOf(250),0.2);
+		Savings sa = new Savings(BigDecimal.valueOf(200),"secretkey213",Status.ACTIVE,ah,ah3,BigDecimal.valueOf(250),0.2);
 		Savings sa1 = new Savings(BigDecimal.valueOf(200),"secretkey213",Status.FROZEN,ah2,ah1,BigDecimal.valueOf(250),0.2);
+		Savings sa2 = new Savings(BigDecimal.valueOf(1000000),"secretkey213",Status.FROZEN,ah2,ah1,BigDecimal.valueOf(250),0.01);
 
-		StudentChecking st = new StudentChecking(BigDecimal.valueOf(200),"secretkey213",Status.FROZEN,ah,ah1);
+		StudentChecking st = new StudentChecking(BigDecimal.valueOf(200),"secretkey213",Status.ACTIVE,ah,ah1);
 		StudentChecking st1 = new StudentChecking(BigDecimal.valueOf(200),"secretkey213",Status.FROZEN,ah2,ah3);
 
+		BigDecimal getBalance = sa.checkAndGetBalance();
 		sa.checkAndSetBalance(sa.getBalance().add(BigDecimal.valueOf(200)));
-		chk.checkAndSetBalance(sa.getBalance().add(BigDecimal.valueOf(200)));
-		chk1.checkAndSetBalance(sa.getBalance().subtract(BigDecimal.valueOf(751)));
+		chk.checkAndSetBalance(chk.getBalance().add(BigDecimal.valueOf(200)));
+		chk1.checkAndSetBalance(chk1.getBalance().subtract(BigDecimal.valueOf(751)));
 
 		userRepository.save(admin);
 		accountHolderRepository.saveAll(List.of(ah,ah1,ah2,ah3,ah4));
 		accountRepository.saveAll(List.of(chk,chk1,chk2,cd,cd1,sa,sa1,st,st1));
-		/*checkingRepository.saveAll(List.of(chk,chk1,chk2));
-		creditCardRepository.saveAll(List.of(cd,cd1));
-		savingsRepository.saveAll(List.of(sa,sa1));
-		studentCheckingRepository.saveAll(List.of(st,st1));*/
 		//passwordEncoder.encode("1234")
 		//create role
 		//roleRepository.save(new Role("CONTRIBUTOR", author1));

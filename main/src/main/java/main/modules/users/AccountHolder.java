@@ -1,5 +1,6 @@
 package main.modules.users;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import java.util.List;
 @Entity
 @Getter @Setter @NoArgsConstructor
 public class AccountHolder extends User {
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate birthDate;
     @Embedded
     private Address address;
@@ -32,8 +34,8 @@ public class AccountHolder extends User {
     @JsonIgnore
     private List<Account> secondaryAccountList;
 
-    public AccountHolder(String name, LocalDate birthDate, Address address/*, Address mailingAddress*/) {
-        super(name);
+    public AccountHolder(String userName, LocalDate birthDate, Address address/*, Address mailingAddress*/) {
+        super(userName);
         this.birthDate = birthDate;
 //      this.mailingAddress = mailingAddress;
         this.address = address;
