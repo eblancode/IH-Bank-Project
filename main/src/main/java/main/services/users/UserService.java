@@ -29,12 +29,13 @@ public class UserService {
 
     public User updateUser(Long id, User user) {
         if (userRepository.findById(id).isPresent()) {
-            User updateUser = userRepository.findById(id).get();
+            User updatedUser = userRepository.findById(id).get();
+            if(user.getUserName() != null) updatedUser.setUserName(user.getUserName());
+            if(user.getPassword() != null) updatedUser.setPassword(user.getPassword());
             /*if(blog.getTitle() != null) updatedBlog.setTitle(blog.getTitle());
             if(blog.getAuthor() != null) updatedBlog.setAuthor(blog.getAuthor());
             if(blog.getPost() != null) updatedBlog.setPost(blog.getPost());*/
-
-            return userRepository.save(updateUser);
+            return userRepository.save(updatedUser);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                 "El id especificado no se encuentra en la base de datos");

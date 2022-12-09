@@ -1,4 +1,4 @@
-package main.controllers.accounts;
+package main.controllers.users;
 
 import main.modules.users.Admin;
 import main.repositories.users.AdminRepository;

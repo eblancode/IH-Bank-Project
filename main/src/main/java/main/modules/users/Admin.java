@@ -8,8 +8,8 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @NoArgsConstructor
 public class Admin extends User {
-    public Admin(String userName) {
-        super(userName);
+    public Admin(String userName, String password) {
+        super(userName, password);
     }
 
 }

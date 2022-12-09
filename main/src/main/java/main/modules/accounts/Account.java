@@ -37,9 +37,9 @@ public abstract class Account {
     private LocalDate creationDate = LocalDate.now();
     @ManyToOne
     //@JoinColumn(name = "primary_owner_id")
+    //todo: @NotNull ?
     private AccountHolder primaryOwner;
     @ManyToOne
-    //@JoinColumn(name = "secondary_owner_id")
     private AccountHolder secondaryOwner;
     @OneToMany(mappedBy = "receiverAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
@@ -116,11 +116,11 @@ public abstract class Account {
         this.secondaryOwner = secondaryOwner;
     }
 
-    public void addInboundTransactionList(Transaction inboundTransactionList) {
+    public void addInboundTransactionToList(Transaction inboundTransactionList) {
         this.inboundTransactionList.add(inboundTransactionList);
     }
 
-    public void addOutboundTransactionList(Transaction outboundTransactionList) {
+    public void addOutboundTransactionToList(Transaction outboundTransactionList) {
         this.inboundTransactionList.add(outboundTransactionList);
     }
 

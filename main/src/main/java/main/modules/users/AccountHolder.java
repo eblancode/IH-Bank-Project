@@ -10,6 +10,7 @@ import main.modules.accounts.Account;
 import main.modules.embedded.Address;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,16 +30,41 @@ public class AccountHolder extends User {
     private Address mailingAddress;
     @OneToMany(mappedBy = "primaryOwner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Account> primaryAccountList;
+    private List<Account> primaryAccountList = new ArrayList<>();
     @OneToMany(mappedBy = "secondaryOwner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Account> secondaryAccountList;
+    private List<Account> secondaryAccountList = new ArrayList<>();
 
-    public AccountHolder(String userName, LocalDate birthDate, Address address/*, Address mailingAddress*/) {
-        super(userName);
+    public AccountHolder(String userName, String password, LocalDate birthDate, Address address, Address mailingAddress) {
+        super(userName, password);
         this.birthDate = birthDate;
-//      this.mailingAddress = mailingAddress;
         this.address = address;
+        this.mailingAddress = mailingAddress;
+    }
+
+    public AccountHolder(LocalDate birthDate, Address address, Address mailingAddress) {
+        this.birthDate = birthDate;
+        this.address = address;
+        this.mailingAddress = mailingAddress;
+    }
+
+    public AccountHolder(LocalDate birthDate, Address address) {
+        this.birthDate = birthDate;
+        this.address = address;
+    }
+
+    public AccountHolder(String userName, String password, LocalDate birthDate, Address address) {
+        super(userName, password);
+        this.birthDate = birthDate;
+        this.address = address;
+    }
+
+    public void addPrimaryAccountToList(Account primaryAccountList) {
+        this.primaryAccountList.add(primaryAccountList);
+    }
+
+    public void addSecondaryAccountToList(Account secondaryAccountList) {
+        this.secondaryAccountList.add(secondaryAccountList);
     }
 
 }

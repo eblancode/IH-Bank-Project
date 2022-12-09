@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 public class Checking extends Account {
     /*private static final BigDecimal minMinimumBalance = BigDecimal.valueOf(250);
     private static final BigDecimal minMMF = BigDecimal.valueOf(12);*/
-    @DecimalMin("250") //todo: do it static final? (needed in the db?)
+    @DecimalMin("250") //todo: do it static final? (fields needed in the db?)
     @DecimalMax("250")
     private final BigDecimal minimumBalance = BigDecimal.valueOf(250);
     @DecimalMin("12")
@@ -25,12 +25,6 @@ public class Checking extends Account {
     public Checking(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
     }
-
-    /*public Checking(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal minimumBalance, BigDecimal monthlyMaintenanceFee) {
-        super(balance, secretKey, status, primaryOwner, secondaryOwner);
-        this.minimumBalance = minimumBalance;
-        this.monthlyMaintenanceFee = monthlyMaintenanceFee;
-    }*/
 
     //TODO: TEST CONSTRAINTS IN SET METHODS, OK?
 

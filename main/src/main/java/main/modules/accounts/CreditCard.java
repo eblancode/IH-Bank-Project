@@ -25,7 +25,7 @@ public class CreditCard extends Account {
     private BigDecimal creditLimit = new BigDecimal("100");
     @DecimalMax("0.2")
     @DecimalMin("0.1")
-    private double interestRate = 0.2; //double ok?
+    private double interestRate = 0.2;
     private LocalDate lastDateInterestRateApplied = null;
 
     //TODO: CHECK CONSTRAINTS IN SET METHODS
@@ -54,11 +54,6 @@ public class CreditCard extends Account {
         /*this.creditLimit = creditLimit;
         this.interestRate = interestRate;*/
     }
-
-    /*@Override
-    public void setBalance(BigDecimal balance) {
-        super.setBalance(balance);
-    }*/
 
     public void instantiateCreditLimit(BigDecimal creditLimit) {
         if(creditLimit.compareTo(MIN_CREDIT_LIMIT)<0||creditLimit.compareTo(MAX_CREDIT_LIMIT)>0) {
@@ -100,5 +95,10 @@ public class CreditCard extends Account {
         this.setLastDateInterestRateApplied(now);
         this.setBalance(balance.add(calculatedAmount));
     }
+
+    /*@Override
+    public void setBalance(BigDecimal balance) {
+        super.setBalance(balance);
+    }*/
 
 }

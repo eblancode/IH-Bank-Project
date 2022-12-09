@@ -31,8 +31,8 @@ public class AccountHolderController {
     }
 
     @PostMapping("/add")
-    @ResponseStatus(HttpStatus.CREATED)
-    public AccountHolder createAccountHolder(@RequestBody AccountHolder accountHolder){
+    @ResponseStatus(HttpStatus.CREATED) //todo: if admin
+    public AccountHolder createAccountHolder(@RequestBody AccountHolder accountHolder) {
         return accountHolderService.addAccountHolder(accountHolder);
 //        return accountHolderRepository.save(accountHolder);
     }
@@ -52,8 +52,7 @@ public class AccountHolderController {
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public User updateUser(@RequestBody AccountHolder accountHolder) {
-        /*if(userService.findUser(user.getId()).isPresent()) {
-        }*/
+        /*if(userService.findUser(user.getId()).isPresent()) {}*/
         if(accountHolderRepository.findById(accountHolder.getId()).isPresent()) {
             return accountHolderRepository.save(accountHolder);
         }

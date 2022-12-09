@@ -1,11 +1,17 @@
 package main.controllers.accounts;
 
+import main.dtos.AccountDTO;
 import main.modules.accounts.Account;
+import main.modules.accounts.Checking;
+import main.modules.accounts.CreditCard;
 import main.modules.accounts.Status;
 import main.repositories.accounts.AccountRepository;
 import main.services.accounts.AccountService;
+import main.services.accounts.CreditCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -18,6 +24,8 @@ public class AccountController {
     AccountRepository accountRepository;
     @Autowired
     AccountService accountService;
+    @Autowired
+    CreditCardService creditCardService;
 
     // GET ALL ACCOUNTS
     @GetMapping("/all")
@@ -34,15 +42,35 @@ public class AccountController {
     }
 
     // GET BALANCE IF ALLOWED
-    @GetMapping("/balance/{name}")
+    @GetMapping("/get_balance/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public Account getAccountHolder(@PathVariable String name) {
+    public Account getAccountHolder(@PathVariable String name) { // todo: auth?
         //todo: check if admin or accountholder can retrieve the balance and do so
         //return accountService.findAccount(name);
         return null;
     }
 
-    // DELETE ACCOUNT BY ID
+    // GET BALANCE IF ALLOWED (BY ID)
+    @GetMapping("/get_balance/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public BigDecimal getBalance(@PathVariable Long id) { // todo: auth?
+        Account account = accountService.findAccount(id);
+        return account.getBalance();
+    }
+
+    // UPDATE BALANCE todo: if admin
+    @PatchMapping("/update_balance/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Account updateBalance(@PathVariable Long id, @RequestParam BigDecimal balance){
+        Account account = accountService.findAccount(id);
+        if(account!=null){
+            account.setBalance(balance); //todo: do check penalty fee?
+            return accountService.saveAccount(account);
+        }
+        return null;
+    }
+
+    // DELETE ACCOUNT BY ID TODO: IF ADMIN
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteAccount(@PathVariable Long id) {
@@ -50,19 +78,22 @@ public class AccountController {
         accountService.deleteAccount(id);
     }
 
-    // UPDATE ACCOUNT BY ID AND PUT
-    @PutMapping("/update/{id}")
+    // UPDATE ACCOUNT BY ID AND PUT TODO: IF ADMIN
+    /*@PutMapping("/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Account updateAccount(@PathVariable Long id, @RequestBody Account account){
         return accountService.updateAccount(id,account);
-    }
+    }*/
 
-    // UPDATE ACCOUNT BY REQUESTBODY
+    // UPDATE ACCOUNT BY REQUEST BODY
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Account updateUser(@RequestBody Account account) {
-        if(accountRepository.findById(account.getId()).isPresent()) {
-            return accountRepository.save(account);
+    public Account updateUser(@RequestBody AccountDTO accountDTO) { //todo: check if ok
+        Long id = accountDTO.getId();
+        Account account = accountService.findAccount(id);
+        if(account!=null/*accountRepository.findById(account.getId()).isPresent()*/) {
+            return accountService.updateAccount(id,account);
+//            return accountService.saveAccount(account);
         }
         return null;
     }
@@ -79,18 +110,44 @@ public class AccountController {
         return null;
     }
 
-    // MAKE TRANSFER
+    // MAKE TRANSFER TODO: IF
     @PatchMapping("/transfer/{userName}/{id}/{amount}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Account updateStatus(@PathVariable Long userName, @PathVariable Long id, @PathVariable BigDecimal amount){
+    public Account updateStatus(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userName, @PathVariable Long id, @PathVariable BigDecimal amount){
         // todo: if "getuser" is owner of "Account" then transfer an amount to an Account found by ID
         // todo: EXTRA if transfer is succesful add Transfer to account list
         if(accountRepository.findById(id).isPresent()){
             Account account = accountRepository.findById(id).get();
-//            account.setStatus(status);
+            //account.setStatus(status);
             return accountRepository.save(account);
         }
         return null;
+    }
+
+    // CHECKING
+    @GetMapping("/checking/all")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Checking> findAllCheckingAccounts() {
+        return accountService.findAllCheckingAccounts();
+    }
+
+    @PostMapping("/checking/add")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Account createCheckingAccount(@RequestBody Checking account){
+        return accountService.createCheckingAccount(account);
+    }
+
+    // CREDIT-CARD
+    @GetMapping("/credit-card/all")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CreditCard> getAllCreditCardAccounts() {
+        return creditCardService.findAllCreditCardAccounts();
+    }
+
+    @PostMapping("/credit-card/add")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CreditCard createCreditCardAccount(@RequestBody CreditCard account){
+        return creditCardService.addCreditCard(account);
     }
 
 }

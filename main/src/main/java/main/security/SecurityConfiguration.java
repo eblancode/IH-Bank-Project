@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PATCH, "/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/accountholder/").hasRole("ACCOUNT_HOLDER")
+                .requestMatchers(HttpMethod.GET, "/account/get_balance/*").hasRole("ACCOUNT_HOLDER")
 
                 .anyRequest().permitAll();
 

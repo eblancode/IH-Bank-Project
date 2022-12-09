@@ -4,14 +4,17 @@ import main.modules.accounts.*;
 import main.modules.embedded.Address;
 import main.modules.users.AccountHolder;
 import main.modules.users.Admin;
+import main.modules.users.Role;
 import main.modules.users.User;
-import main.repositories.accounts.*;
+import main.repositories.RoleRepository;
+import main.repositories.accounts.AccountRepository;
 import main.repositories.users.AccountHolderRepository;
 import main.repositories.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,13 +30,10 @@ public class MainApplication implements CommandLineRunner {
 	@Autowired
 	AccountRepository accountRepository;
 	@Autowired
-	CreditCardRepository creditCardRepository;
+	PasswordEncoder passwordEncoder;
 	@Autowired
-	CheckingRepository checkingRepository;
-	@Autowired
-	SavingsRepository savingsRepository;
-	@Autowired
-	StudentCheckingRepository studentCheckingRepository;
+	RoleRepository roleRepository;
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(MainApplication.class, args);
@@ -52,13 +52,14 @@ public class MainApplication implements CommandLineRunner {
 		Address addr2 = new Address("C/ Barcelona, 123","08002","Barcelona","ES");
 		Address addr3 = new Address("C/ Bcn, 123","08003","Barcelona","ES");
 
-		Admin admin = new Admin("God");
+		Admin admin = new Admin("God",passwordEncoder.encode("1234"));
+		Role adminRole = new Role("ADMIN",admin);
 
-		AccountHolder ah = new AccountHolder("Eduard", LocalDate.of(1994,07,01),addr);
-		AccountHolder ah1 = new AccountHolder("Holder A", LocalDate.of(2000,01,01),addr1);
-		AccountHolder ah2 = new AccountHolder("Holder B", LocalDate.of(2001,01,01),addr2);
-		AccountHolder ah3 = new AccountHolder("Holder C", LocalDate.of(2002,01,01),addr3);
-		AccountHolder ah4 = new AccountHolder("Hodler", LocalDate.of(1899,01,01),addr3);
+		AccountHolder ah = new AccountHolder("Eduard",passwordEncoder.encode("1234"), LocalDate.of(1994,07,01),addr);
+		AccountHolder ah1 = new AccountHolder("Holder A",passwordEncoder.encode("1234"), LocalDate.of(2000,01,01),addr1);
+		AccountHolder ah2 = new AccountHolder("Holder B",passwordEncoder.encode("1234"), LocalDate.of(2001,01,01),addr2);
+		AccountHolder ah3 = new AccountHolder("Holder C",passwordEncoder.encode("1234"), LocalDate.of(2002,01,01),addr3);
+		AccountHolder ah4 = new AccountHolder("Hodler",passwordEncoder.encode("1234"), LocalDate.of(1899,01,01),addr3);
 
 		Checking chk = new Checking(BigDecimal.valueOf(2000),"secretkey123",Status.ACTIVE,ah,ah1);
 		Checking chk1 = new Checking(BigDecimal.valueOf(1000),"secretkey321",Status.ACTIVE,ah,ah1);
@@ -79,12 +80,18 @@ public class MainApplication implements CommandLineRunner {
 		chk.checkAndSetBalance(chk.getBalance().add(BigDecimal.valueOf(200)));
 		chk1.checkAndSetBalance(chk1.getBalance().subtract(BigDecimal.valueOf(751)));
 
+
 		userRepository.save(admin);
 		accountHolderRepository.saveAll(List.of(ah,ah1,ah2,ah3,ah4));
 		accountRepository.saveAll(List.of(chk,chk1,chk2,cd,cd1,sa,sa1,st,st1));
+		roleRepository.save(adminRole);
 		//passwordEncoder.encode("1234")
 		//create role
 		//roleRepository.save(new Role("CONTRIBUTOR", author1));
+	}
+
+	public void temporarySetUp() {
+
 	}
 
 }
