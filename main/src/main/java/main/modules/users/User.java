@@ -22,6 +22,7 @@ public abstract class User {
     @Column(name = "id", nullable = false)
     private Long id;
     @NotNull
+    @Column(unique=true)
     private String userName;
     @NotNull
     private String password;

@@ -28,8 +28,11 @@ public class SecurityConfiguration {
         httpSecurity.httpBasic();
         httpSecurity.authorizeHttpRequests()
                 .requestMatchers(HttpMethod.GET, "/account/get_balance/**").hasAnyRole("ACCOUNT_HOLDER","ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/transfer").permitAll()
-                .requestMatchers(HttpMethod.PATCH, "/transfer").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/transfer").hasAnyRole("ACCOUNT_HOLDER","ADMIN")
+                .requestMatchers(HttpMethod.PATCH, "/transfer").hasAnyRole("ACCOUNT_HOLDER","ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/transfer/third-party**").hasAnyRole("THIRD_PARTY","ADMIN")
+                .requestMatchers(HttpMethod.PATCH, "/transfer/third-party**").hasAnyRole("THIRD_PARTY","ADMIN")
+                .requestMatchers(HttpMethod.POST, "/user/third-party/add").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")

@@ -59,19 +59,20 @@ public class IHBankProjectApplication implements CommandLineRunner {
 //		admin.addRoleToRoles(adminRole);
 
 		String pwd = passwordEncoder.encode("1234");
-		AccountHolder ah = new AccountHolder("eduard",passwordEncoder.encode("1234"), LocalDate.of(1994,07,01),addr);
+		AccountHolder ah = new AccountHolder("eduard",pwd, LocalDate.of(1994,07,01),addr);
 		AccountHolder ah1 = new AccountHolder("Holder A",pwd, LocalDate.of(2000,01,01),addr1);
 		AccountHolder ah2 = new AccountHolder("Holder B",pwd, LocalDate.of(2001,01,01),addr2);
 		AccountHolder ah3 = new AccountHolder("Holder C",passwordEncoder.encode("1234"), LocalDate.of(2002,01,01),addr3);
 		AccountHolder ah4 = new AccountHolder("Hodler",passwordEncoder.encode("1234"), LocalDate.of(1899,01,01),addr3);
 		Role accountHolderRole = new Role("ACCOUNT_HOLDER",ah);
 
-		ThirdParty tp = new ThirdParty("tp",pwd,"hashedkey");
+		ThirdParty tp = new ThirdParty("tp",passwordEncoder.encode("1234"),"hashedkey");
 		Role thirdPartyRole = new Role("THIRD_PARTY",tp);
 
 		Checking chk = new Checking(BigDecimal.valueOf(2000),"secretkey123", Status.ACTIVE,ah,ah1);
 		Checking chk1 = new Checking(BigDecimal.valueOf(1000),"secretkey321",Status.ACTIVE,ah,ah1);
 		Checking chk2 = new Checking(BigDecimal.valueOf(1500),"secretkey213",Status.FROZEN,ah,ah1);
+		Checking chk3 = new Checking(BigDecimal.valueOf(1500),"secretkey213",Status.FROZEN,ah,ah1);
 
 		CreditCard cd = new CreditCard(BigDecimal.valueOf(200),"secretkey213",Status.ACTIVE,ah,ah1);
 		CreditCard cd1 = new CreditCard(BigDecimal.valueOf(200),"secretkey213",Status.FROZEN,ah,ah1,BigDecimal.valueOf(250),0.2);

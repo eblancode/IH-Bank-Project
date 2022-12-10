@@ -51,7 +51,7 @@ public class AccountController {
     // GET BALANCE IF ALLOWED (BY ID)
     @GetMapping("/get_balance/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public String getBalance(@PathVariable Long id) { // todo: auth? CHECK!
+    public String getBalance(@PathVariable Long id) {
         Account account = accountService.findAccount(id);
         return account.getBalance().toString();
     }
@@ -133,7 +133,7 @@ public class AccountController {
     @PostMapping("/checking/add")
     @ResponseStatus(HttpStatus.CREATED)
     public Account createCheckingAccount(@RequestBody Checking account){
-        return accountService.createCheckingAccount(account);
+        return accountService.addCheckingAccount(account);
     }
 
     // CREDIT-CARD

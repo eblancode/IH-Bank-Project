@@ -18,9 +18,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User findUser(Long id) {
+    public User findUserById(Long id) {
         return (User) userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exsist"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
+    }
+
+    public User findUserByUserName(String userName) {
+        return (User) userRepository.findByUserName(userName)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
     }
 
     public void deleteById(Long id) {

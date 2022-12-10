@@ -28,7 +28,7 @@ public class AccountService {
         return checkingRepository.findAll();
     }
 
-    public Account createCheckingAccount(Checking checkingAccount) {
+    public Account addCheckingAccount(Checking checkingAccount) {
         if(Period.between(checkingAccount.getPrimaryOwner().getBirthDate(),
                 LocalDate.now()).getYears() < 24) {
             StudentChecking studentChecking = new StudentChecking(checkingAccount.getBalance(),
@@ -45,7 +45,7 @@ public class AccountService {
 
     public Account findAccount(Long id) {
         return (Account) accountRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account does not exsist"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account does not exist."));
     }
 
     /*public Account getAccount(Long id) {
