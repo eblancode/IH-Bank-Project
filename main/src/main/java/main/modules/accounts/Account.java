@@ -36,7 +36,6 @@ public abstract class Account {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate creationDate = LocalDate.now();
     @ManyToOne
-    //@JoinColumn(name = "primary_owner_id")
     //todo: @NotNull ?
     private AccountHolder primaryOwner;
     @ManyToOne

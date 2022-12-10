@@ -23,12 +23,8 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "receiver_account_id")
     private Account receiverAccount;
-    /*@ManyToOne
-    @JoinColumn(name = "maker_id")
-    private User maker;*/
     private BigDecimal amount;
     private LocalDateTime creationDate = LocalDateTime.now();
-    //...
 
     public Transaction(Account senderAccount, Account receiverAccount, BigDecimal amount) {
         this.senderAccount = senderAccount;

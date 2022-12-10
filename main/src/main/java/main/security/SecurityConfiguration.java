@@ -38,7 +38,6 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PATCH, "/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
-
                 .anyRequest().denyAll();
 
         httpSecurity.csrf().disable();

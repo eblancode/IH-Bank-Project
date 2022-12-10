@@ -55,8 +55,6 @@ public class IHBankProjectApplication implements CommandLineRunner {
 
 		Admin admin = new Admin("admin",passwordEncoder.encode("1234"));
 		Role adminRole = new Role("ADMIN",admin);
-//		adminRole.addToUserList(admin);
-//		admin.addRoleToRoles(adminRole);
 
 		String pwd = passwordEncoder.encode("1234");
 		AccountHolder ah = new AccountHolder("eduard",pwd, LocalDate.of(1994,07,01),addr);
@@ -92,13 +90,10 @@ public class IHBankProjectApplication implements CommandLineRunner {
 		userRepository.save(admin);
 		userRepository.save(tp);
 		accountHolderRepository.saveAll(List.of(ah,ah1,ah2,ah3,ah4));
-		//roleRepository.save(adminRole);
 		roleRepository.saveAll(List.of(adminRole,accountHolderRole,thirdPartyRole));
 
 
 		accountRepository.saveAll(List.of(chk,chk1,chk2,cd,cd1,sa,sa1,sa2,st,st1));
-		//create role
-		//roleRepository.save(new Role("CONTRIBUTOR", author1));
 	}
 
 }

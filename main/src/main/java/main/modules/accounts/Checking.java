@@ -13,9 +13,7 @@ import java.math.BigDecimal;
 @Entity
 @Getter @Setter @NoArgsConstructor
 public class Checking extends Account {
-    /*private static final BigDecimal minMinimumBalance = BigDecimal.valueOf(250);
-    private static final BigDecimal minMMF = BigDecimal.valueOf(12);*/
-    @DecimalMin("250") //todo: do it static final? (fields needed in the db?)
+    @DecimalMin("250")
     @DecimalMax("250")
     private final BigDecimal minimumBalance = BigDecimal.valueOf(250);
     @DecimalMin("12")
@@ -25,19 +23,5 @@ public class Checking extends Account {
     public Checking(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
     }
-
-    //TODO: TEST CONSTRAINTS IN SET METHODS, OK?
-
-    /*public void setMinimumBalance(BigDecimal minimumBalance) {
-        this.minimumBalance = minimumBalance.max(minMinimumBalance);
-        if(this.minimumBalance.equals(minMinimumBalance))
-            System.out.println("Minimum balance for Checking is set to a minimum value");
-    }
-
-    public void setMonthlyMaintenanceFee(BigDecimal monthlyMaintenanceFee) {
-        this.monthlyMaintenanceFee = monthlyMaintenanceFee.max(minMMF);
-        if(this.monthlyMaintenanceFee.equals(minMMF))
-            System.out.println("Monthly maintenance fee for Checking is set to a minimum value");
-    }*/
 
 }

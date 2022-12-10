@@ -6,7 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction,Long> {
-    /*BigDecimal increaseAmount(BigDecimal amount);
-    BigDecimal decreaseAmount(BigDecimal amount);*///todo:
-
 }

@@ -13,7 +13,6 @@ public class TransactionDTO {
     private Long accountSenderId;
     @NotNull
     private Long accountReceiverId;
-    //@NotNull
     private String receiverUserName;
     @NotNull
     private BigDecimal amount;

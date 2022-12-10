@@ -96,9 +96,4 @@ public class CreditCard extends Account {
         this.setBalance(balance.add(calculatedAmount));
     }
 
-    /*@Override
-    public void setBalance(BigDecimal balance) {
-        super.setBalance(balance);
-    }*/
-
 }

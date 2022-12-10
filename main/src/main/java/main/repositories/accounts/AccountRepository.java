@@ -11,8 +11,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-//    Optional<Account> findByName(String username); NO
-
     @Modifying
     @Transactional
     @Query("delete from Account where id=:id")

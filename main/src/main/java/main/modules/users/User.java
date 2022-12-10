@@ -29,8 +29,6 @@ public abstract class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Role> roles = new HashSet<>();
-    /*@OneToMany(mappedBy = "maker")
-    private List<Transaction> transactionsMade = new ArrayList<>();*/
 
     public User(String userName, String password) {
         this.userName = userName;

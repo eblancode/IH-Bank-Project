@@ -39,15 +39,6 @@ public class AccountController {
         return accountService.findAccount(id);
     }
 
-    // GET BALANCE IF ALLOWED
-    /*@GetMapping("/get_balance/{name}")
-    @ResponseStatus(HttpStatus.OK)
-    public Account getAccountHolder(@PathVariable String name) { // todo: auth?
-        //todo: check if admin or accountholder can retrieve the balance and do so
-        //return accountService.findAccount(name);
-        return null;
-    }*/
-
     // GET BALANCE IF ALLOWED (BY ID)
     @GetMapping("/get_balance/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -75,13 +66,6 @@ public class AccountController {
         //accountService.deleteById(id);
         accountService.deleteAccount(id);
     }
-
-    // UPDATE ACCOUNT BY ID AND PUT TODO: IF ADMIN
-    /*@PutMapping("/update/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Account updateAccount(@PathVariable Long id, @RequestBody Account account){
-        return accountService.updateAccount(id,account);
-    }*/
 
     // UPDATE ACCOUNT BY REQUEST BODY
     @PutMapping("/update")

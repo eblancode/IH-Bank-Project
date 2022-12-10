@@ -10,7 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service
-public class AccountHolderService { //HACERLO EN ACCOUNTSERVICE?
+public class AccountHolderService {
     @Autowired
     AccountHolderRepository accountHolderRepository;
 
