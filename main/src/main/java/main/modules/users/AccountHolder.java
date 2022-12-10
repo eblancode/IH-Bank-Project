@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import main.modules.accounts.Account;
-import main.modules.embedded.Address;
+import main.modules.users.embedded.Address;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

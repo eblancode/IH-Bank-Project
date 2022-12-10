@@ -1,6 +1,6 @@
 package main.security;
 
-import main.modules.users.Role;
+import main.modules.security.Role;
 import main.modules.users.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

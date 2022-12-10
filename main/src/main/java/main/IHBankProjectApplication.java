@@ -1,12 +1,10 @@
 package main;
 
 import main.modules.accounts.*;
-import main.modules.embedded.Address;
-import main.modules.users.AccountHolder;
-import main.modules.users.Admin;
-import main.modules.users.Role;
-import main.modules.users.User;
-import main.repositories.RoleRepository;
+import main.modules.security.Role;
+import main.modules.users.embedded.Address;
+import main.modules.users.*;
+import main.repositories.security.RoleRepository;
 import main.repositories.accounts.AccountRepository;
 import main.repositories.users.AccountHolderRepository;
 import main.repositories.users.UserRepository;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
-public class MainApplication implements CommandLineRunner {
+public class IHBankProjectApplication implements CommandLineRunner {
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
@@ -34,9 +32,8 @@ public class MainApplication implements CommandLineRunner {
 	@Autowired
 	RoleRepository roleRepository;
 
-
 	public static void main(String[] args) {
-		SpringApplication.run(MainApplication.class, args);
+		SpringApplication.run(IHBankProjectApplication.class, args);
 	}
 
 	@Override
@@ -44,6 +41,10 @@ public class MainApplication implements CommandLineRunner {
 		// TO APPLY SPECIFIED FUNCTIONALITIES ALL ACCOUNTS SHOULD CALL
 		// checkAndGetBalance/checkAndSetBalance RESPECTIVELY RATHER THAN REGULAR
 		// getBalance/setBalance
+		temporarySetUp();
+	}
+
+	public void temporarySetUp() {
 		List<Account> accountList = new ArrayList<>();
 		List<User> userList = new ArrayList<>();
 
@@ -52,16 +53,23 @@ public class MainApplication implements CommandLineRunner {
 		Address addr2 = new Address("C/ Barcelona, 123","08002","Barcelona","ES");
 		Address addr3 = new Address("C/ Bcn, 123","08003","Barcelona","ES");
 
-		Admin admin = new Admin("God",passwordEncoder.encode("1234"));
+		Admin admin = new Admin("admin",passwordEncoder.encode("1234"));
 		Role adminRole = new Role("ADMIN",admin);
+//		adminRole.addToUserList(admin);
+//		admin.addRoleToRoles(adminRole);
 
-		AccountHolder ah = new AccountHolder("Eduard",passwordEncoder.encode("1234"), LocalDate.of(1994,07,01),addr);
-		AccountHolder ah1 = new AccountHolder("Holder A",passwordEncoder.encode("1234"), LocalDate.of(2000,01,01),addr1);
-		AccountHolder ah2 = new AccountHolder("Holder B",passwordEncoder.encode("1234"), LocalDate.of(2001,01,01),addr2);
+		String pwd = passwordEncoder.encode("1234");
+		AccountHolder ah = new AccountHolder("eduard",passwordEncoder.encode("1234"), LocalDate.of(1994,07,01),addr);
+		AccountHolder ah1 = new AccountHolder("Holder A",pwd, LocalDate.of(2000,01,01),addr1);
+		AccountHolder ah2 = new AccountHolder("Holder B",pwd, LocalDate.of(2001,01,01),addr2);
 		AccountHolder ah3 = new AccountHolder("Holder C",passwordEncoder.encode("1234"), LocalDate.of(2002,01,01),addr3);
 		AccountHolder ah4 = new AccountHolder("Hodler",passwordEncoder.encode("1234"), LocalDate.of(1899,01,01),addr3);
+		Role accountHolderRole = new Role("ACCOUNT_HOLDER",ah);
 
-		Checking chk = new Checking(BigDecimal.valueOf(2000),"secretkey123",Status.ACTIVE,ah,ah1);
+		ThirdParty tp = new ThirdParty("tp",pwd,"hashedkey");
+		Role thirdPartyRole = new Role("THIRD_PARTY",tp);
+
+		Checking chk = new Checking(BigDecimal.valueOf(2000),"secretkey123", Status.ACTIVE,ah,ah1);
 		Checking chk1 = new Checking(BigDecimal.valueOf(1000),"secretkey321",Status.ACTIVE,ah,ah1);
 		Checking chk2 = new Checking(BigDecimal.valueOf(1500),"secretkey213",Status.FROZEN,ah,ah1);
 
@@ -80,18 +88,16 @@ public class MainApplication implements CommandLineRunner {
 		chk.checkAndSetBalance(chk.getBalance().add(BigDecimal.valueOf(200)));
 		chk1.checkAndSetBalance(chk1.getBalance().subtract(BigDecimal.valueOf(751)));
 
-
 		userRepository.save(admin);
+		userRepository.save(tp);
 		accountHolderRepository.saveAll(List.of(ah,ah1,ah2,ah3,ah4));
-		accountRepository.saveAll(List.of(chk,chk1,chk2,cd,cd1,sa,sa1,st,st1));
-		roleRepository.save(adminRole);
-		//passwordEncoder.encode("1234")
+		//roleRepository.save(adminRole);
+		roleRepository.saveAll(List.of(adminRole,accountHolderRole,thirdPartyRole));
+
+
+		accountRepository.saveAll(List.of(chk,chk1,chk2,cd,cd1,sa,sa1,sa2,st,st1));
 		//create role
 		//roleRepository.save(new Role("CONTRIBUTOR", author1));
-	}
-
-	public void temporarySetUp() {
-
 	}
 
 }

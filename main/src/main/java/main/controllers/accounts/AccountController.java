@@ -10,8 +10,6 @@ import main.services.accounts.AccountService;
 import main.services.accounts.CreditCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -42,20 +40,20 @@ public class AccountController {
     }
 
     // GET BALANCE IF ALLOWED
-    @GetMapping("/get_balance/{name}")
+    /*@GetMapping("/get_balance/{name}")
     @ResponseStatus(HttpStatus.OK)
     public Account getAccountHolder(@PathVariable String name) { // todo: auth?
         //todo: check if admin or accountholder can retrieve the balance and do so
         //return accountService.findAccount(name);
         return null;
-    }
+    }*/
 
     // GET BALANCE IF ALLOWED (BY ID)
     @GetMapping("/get_balance/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BigDecimal getBalance(@PathVariable Long id) { // todo: auth?
+    public String getBalance(@PathVariable Long id) { // todo: auth? CHECK!
         Account account = accountService.findAccount(id);
-        return account.getBalance();
+        return account.getBalance().toString();
     }
 
     // UPDATE BALANCE todo: if admin
@@ -111,18 +109,19 @@ public class AccountController {
     }
 
     // MAKE TRANSFER TODO: IF
-    @PatchMapping("/transfer/{userName}/{id}/{amount}")
+    /*@PatchMapping("/transfer")*//*//*transfer/{userName}/{id}/{amount}*//**//*@PathVariable Long userName*//*
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Account updateStatus(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userName, @PathVariable Long id, @PathVariable BigDecimal amount){
+    public Account updateStatus(@AuthenticationPrincipal UserDetails, @RequestBody TransactionDTO transactionDTO){
         // todo: if "getuser" is owner of "Account" then transfer an amount to an Account found by ID
         // todo: EXTRA if transfer is succesful add Transfer to account list
-        if(accountRepository.findById(id).isPresent()){
+
+        if(accountRepository.findById().isPresent()){
             Account account = accountRepository.findById(id).get();
             //account.setStatus(status);
             return accountRepository.save(account);
         }
         return null;
-    }
+    }*/
 
     // CHECKING
     @GetMapping("/checking/all")

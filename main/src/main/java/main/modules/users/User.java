@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import main.modules.security.Role;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.validation.constraints.NotNull;
@@ -27,10 +28,16 @@ public abstract class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Role> roles = new HashSet<>();
+    /*@OneToMany(mappedBy = "maker")
+    private List<Transaction> transactionsMade = new ArrayList<>();*/
 
     public User(String userName, String password) {
         this.userName = userName;
         this.password = password;
+    }
+
+    public void addRoleToRoles(Role role) {
+        this.roles.add(role);
     }
 
 }

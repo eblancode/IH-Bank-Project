@@ -1,4 +1,4 @@
-package main.modules.embedded;
+package main.modules.users.embedded;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;

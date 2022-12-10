@@ -27,20 +27,20 @@ public class SecurityConfiguration {
     protected SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.httpBasic();
         httpSecurity.authorizeHttpRequests()
+                .requestMatchers(HttpMethod.GET, "/account/get_balance/**").hasAnyRole("ACCOUNT_HOLDER","ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/transfer").permitAll()
+                .requestMatchers(HttpMethod.PATCH, "/transfer").permitAll()
                 .requestMatchers(HttpMethod.GET, "/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PATCH, "/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/account/get_balance/*").hasRole("ACCOUNT_HOLDER")
 
-                .anyRequest().permitAll();
+                .anyRequest().denyAll();
 
         httpSecurity.csrf().disable();
 
         return httpSecurity.build();
     }
-
-
 
 }

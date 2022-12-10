@@ -1,6 +1,6 @@
-package main.repositories;
+package main.repositories.security;
 
-import main.modules.users.Role;
+import main.modules.security.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

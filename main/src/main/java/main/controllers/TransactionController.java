@@ -1,35 +1,30 @@
 package main.controllers;
 
+import main.dtos.TransactionDTO;
+import main.modules.Transaction;
 import main.repositories.TransactionRepository;
+import main.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-
 @RestController
 @RequestMapping("/transfer")
 public class TransactionController {
     @Autowired
     TransactionRepository transactionRepository;
+    @Autowired
+    TransactionService transactionService;
 
-    @PatchMapping("/{userName}/{id}/{amount}")
+    @PatchMapping("")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public BigDecimal makeTransfer(@AuthenticationPrincipal UserDetails userDetails,
-                                @PathVariable Long userName,
-                                @PathVariable Long destinationAccountId,
-                                @PathVariable BigDecimal amount){
+    public Transaction makeAccountTransfer(@AuthenticationPrincipal UserDetails userDetails, @RequestBody TransactionDTO transactionDTO){/*@AuthenticationPrincipal UserDetails userDetails,*/
         // todo: if "getuser" is owner of "Account" then transfer an amount to an Account found by ID
         // todo: EXTRA if transfer is succesful add Transfer to account list
-
-        /*if(accountRepository.findById(id).isPresent()){
-            Account account = accountRepository.findById(id).get();
-            //account.setStatus(status);
-            return accountRepository.save(account);
-        }*/
-        return null;
+        //if (userDetails.getUsername().equals(transactionDTO.se))
+        return transactionService.transfer(transactionDTO,userDetails.getUsername());
     }
 
 }

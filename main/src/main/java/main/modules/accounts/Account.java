@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@DynamicUpdate // ok?
+@DynamicUpdate
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter @Setter @NoArgsConstructor @ToString
 public abstract class Account {
@@ -30,7 +30,7 @@ public abstract class Account {
     private BigDecimal balance;
     private String secretKey;
     @Enumerated(EnumType.STRING)
-    private Status status = Status.ACTIVE; // ok?
+    private Status status = Status.ACTIVE;
     /*@JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)*/
     @JsonFormat(pattern = "dd-MM-yyyy")
@@ -76,24 +76,28 @@ public abstract class Account {
     }
 
     private void checkBalance(BigDecimal balance) {
+        String callerMethod = Thread.currentThread().getStackTrace()[2].getMethodName();
         if(this instanceof Savings || this instanceof Checking) {
             if(this instanceof Savings savingsAccount) {
                 // Check/Apply penalty fee if balance is due to change
-                if(!Thread.currentThread().getStackTrace()[2].getMethodName().equals("checkAndGetBalance"))
+                if(!callerMethod.equals("checkAndGetBalance"))
                     if(savingsAccount.getMinimumBalance().compareTo(balance) > 0){
                         deductPenaltyFeeAndSetBalance(balance);
                     }
+                    else this.setBalance(balance);
                 // Check/Apply interest rate
                 if (savingsAccount.getLastDateInterestRateApplied()!=null) {
                     savingsAccount.checkInterestRate(balance);
-                }
+                } //todo: check setbalance x2
+                return;
             }
             else if (this instanceof Checking checkingAccount) { //todo: Done for Aliases, OK?
                 // Check/Apply penalty fee if balance is due to change
-                if(!Thread.currentThread().getStackTrace()[2].getMethodName().equals("checkAndGetBalance"))
-                    if(checkingAccount.getMinimumBalance().compareTo(balance) > 0){
+                if(!callerMethod.equals("checkAndGetBalance"))
+                    if (checkingAccount.getMinimumBalance().compareTo(balance) > 0) {
                         deductPenaltyFeeAndSetBalance(balance);
-                    }
+                    } else this.setBalance(balance);
+                return;
             }
         }
         else if (this instanceof CreditCard creditCard) {
@@ -101,11 +105,13 @@ public abstract class Account {
             if (creditCard.getLastDateInterestRateApplied()!=null) {
                 creditCard.checkInterestRate(balance);
             }
+            else if(callerMethod.equals("checkAndSetBalance")) this.setBalance(balance);
         }
     }
 
     private void deductPenaltyFeeAndSetBalance(BigDecimal balance) {
         this.setBalance(balance.subtract(PENALTY_FEE));
+        System.out.println("A penalty fee was applied to the account."); //todo: check message
     }
 
     public void setPrimaryOwner(AccountHolder primaryOwner) {
