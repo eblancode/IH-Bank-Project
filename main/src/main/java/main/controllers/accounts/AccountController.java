@@ -1,15 +1,14 @@
 package main.controllers.accounts;
 
 import main.dtos.AccountDTO;
-import main.modules.accounts.Account;
-import main.modules.accounts.Checking;
-import main.modules.accounts.CreditCard;
-import main.modules.accounts.Status;
+import main.modules.accounts.*;
 import main.repositories.accounts.AccountRepository;
 import main.services.accounts.AccountService;
-import main.services.accounts.CreditCardService;
+import main.services.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -23,7 +22,7 @@ public class AccountController {
     @Autowired
     AccountService accountService;
     @Autowired
-    CreditCardService creditCardService;
+    UserService userService;
 
     // GET ALL ACCOUNTS
     @GetMapping("/all")
@@ -42,9 +41,8 @@ public class AccountController {
     // GET BALANCE IF ALLOWED (BY ID)
     @GetMapping("/get_balance/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public String getBalance(@PathVariable Long id) {
-        Account account = accountService.findAccount(id);
-        return account.getBalance().toString();
+    public String getAccountBalance(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) {
+        return accountService.getBalance(userDetails,id);
     }
 
     // UPDATE BALANCE todo: if admin
@@ -52,11 +50,8 @@ public class AccountController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Account updateBalance(@PathVariable Long id, @RequestParam BigDecimal balance){
         Account account = accountService.findAccount(id);
-        if(account!=null){
-            account.setBalance(balance); //todo: do check penalty fee?
-            return accountService.saveAccount(account);
-        }
-        return null;
+        account.setBalance(balance);
+        return accountService.saveAccount(account);
     }
 
     // DELETE ACCOUNT BY ID TODO: IF ADMIN
@@ -73,9 +68,8 @@ public class AccountController {
     public Account updateUser(@RequestBody AccountDTO accountDTO) { //todo: check if ok
         Long id = accountDTO.getId();
         Account account = accountService.findAccount(id);
-        if(account!=null/*accountRepository.findById(account.getId()).isPresent()*/) {
+        if(account!=null) {
             return accountService.updateAccount(id,account);
-//            return accountService.saveAccount(account);
         }
         return null;
     }
@@ -91,21 +85,6 @@ public class AccountController {
         }
         return null;
     }
-
-    // MAKE TRANSFER TODO: IF
-    /*@PatchMapping("/transfer")*//*//*transfer/{userName}/{id}/{amount}*//**//*@PathVariable Long userName*//*
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Account updateStatus(@AuthenticationPrincipal UserDetails, @RequestBody TransactionDTO transactionDTO){
-        // todo: if "getuser" is owner of "Account" then transfer an amount to an Account found by ID
-        // todo: EXTRA if transfer is succesful add Transfer to account list
-
-        if(accountRepository.findById().isPresent()){
-            Account account = accountRepository.findById(id).get();
-            //account.setStatus(status);
-            return accountRepository.save(account);
-        }
-        return null;
-    }*/
 
     // CHECKING
     @GetMapping("/checking/all")
@@ -124,13 +103,26 @@ public class AccountController {
     @GetMapping("/credit-card/all")
     @ResponseStatus(HttpStatus.OK)
     public List<CreditCard> getAllCreditCardAccounts() {
-        return creditCardService.findAllCreditCardAccounts();
+        return accountService.findAllCreditCardAccounts();
     }
 
     @PostMapping("/credit-card/add")
     @ResponseStatus(HttpStatus.CREATED)
     public CreditCard createCreditCardAccount(@RequestBody CreditCard account){
-        return creditCardService.addCreditCard(account);
+        return accountService.addCreditCardAccount(account);
+    }
+
+    // SAVINGS
+    @GetMapping("/savings/all")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Savings> getAllSavingsAccounts() {
+        return accountService.findAllSavingsAccounts();
+    }
+
+    @PostMapping("/savings/add")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Savings createCreditCardAccount(@RequestBody Savings account){
+        return accountService.addSavingsAccount(account);
     }
 
 }

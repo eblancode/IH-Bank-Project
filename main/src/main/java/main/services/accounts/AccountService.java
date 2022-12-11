@@ -1,13 +1,10 @@
 package main.services.accounts;
 
-import main.modules.accounts.Account;
-import main.modules.accounts.Checking;
-import main.modules.accounts.StudentChecking;
-import main.repositories.accounts.AccountRepository;
-import main.repositories.accounts.CheckingRepository;
-import main.repositories.accounts.StudentCheckingRepository;
+import main.modules.accounts.*;
+import main.repositories.accounts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,21 +20,10 @@ public class AccountService {
     CheckingRepository checkingRepository;
     @Autowired
     StudentCheckingRepository studentCheckingRepository;
-
-    public List<Checking> findAllCheckingAccounts() {
-        return checkingRepository.findAll();
-    }
-
-    public Account addCheckingAccount(Checking checkingAccount) {
-        if(Period.between(checkingAccount.getPrimaryOwner().getBirthDate(),
-                LocalDate.now()).getYears() < 24) {
-            StudentChecking studentChecking = new StudentChecking(checkingAccount.getBalance(),
-                    checkingAccount.getSecretKey(), checkingAccount.getStatus(),
-                    checkingAccount.getPrimaryOwner(), checkingAccount.getSecondaryOwner());
-            return studentCheckingRepository.save(studentChecking);
-        }
-        else return checkingRepository.save(checkingAccount);
-    }
+    @Autowired
+    CreditCardRepository creditCardRepository;
+    @Autowired
+    SavingsRepository savingsRepository;
 
     public List<Account> findAllAccounts() {
         return accountRepository.findAll();
@@ -67,4 +53,52 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
+    // CHECKING ACCOUNTS
+    public List<Checking> findAllCheckingAccounts() {
+        return checkingRepository.findAll();
+    }
+
+    public Account addCheckingAccount(Checking checkingAccount) {
+        if(Period.between(checkingAccount.getPrimaryOwner().getBirthDate(),
+                LocalDate.now()).getYears() < 24) {
+            StudentChecking studentChecking = new StudentChecking(checkingAccount.getBalance(),
+                    checkingAccount.getSecretKey(), checkingAccount.getStatus(),
+                    checkingAccount.getPrimaryOwner(), checkingAccount.getSecondaryOwner());
+            return studentCheckingRepository.save(studentChecking);
+        }
+        else return checkingRepository.save(checkingAccount);
+    }
+
+    // CREDIT-CARD ACCOUNTS
+    public List<CreditCard> findAllCreditCardAccounts() {
+        return creditCardRepository.findAll();
+    }
+
+    public CreditCard addCreditCardAccount(CreditCard account) {
+        return creditCardRepository.save(account);
+    }
+
+    // SAVINGS ACCOUNTS
+    public List<Savings> findAllSavingsAccounts() {
+        return savingsRepository.findAll();
+    }
+
+    public String getBalance(UserDetails userDetails, Long id) {
+        Account account = this.findAccount(id);
+        String userName = userDetails.getUsername();
+
+        // Check if user is authorized
+        if(!userName.equals(account.getPrimaryOwner().getUserName()) &&
+                !userName.equals("admin") ||
+                account.getSecondaryOwner().getUserName()!=null &&
+                !userName.equals(account.getSecondaryOwner().getUserName()))
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User not authorized.");
+
+
+        return account.getBalance().toString();
+    }
+
+    public Savings addSavingsAccount(Savings account) {
+        return savingsRepository.save(account);
+    }
 }

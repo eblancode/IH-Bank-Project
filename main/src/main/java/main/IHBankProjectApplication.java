@@ -70,7 +70,7 @@ public class IHBankProjectApplication implements CommandLineRunner {
 		Checking chk = new Checking(BigDecimal.valueOf(2000),"secretkey123", Status.ACTIVE,ah,ah1);
 		Checking chk1 = new Checking(BigDecimal.valueOf(1000),"secretkey321",Status.ACTIVE,ah,ah1);
 		Checking chk2 = new Checking(BigDecimal.valueOf(1500),"secretkey213",Status.FROZEN,ah,ah1);
-		Checking chk3 = new Checking(BigDecimal.valueOf(1500),"secretkey213",Status.FROZEN,ah,ah1);
+		Checking chk3 = new Checking(BigDecimal.valueOf(1700),"secretkey213",Status.FROZEN,ah,ah1);
 
 		CreditCard cd = new CreditCard(BigDecimal.valueOf(200),"secretkey213",Status.ACTIVE,ah,ah1);
 		CreditCard cd1 = new CreditCard(BigDecimal.valueOf(200),"secretkey213",Status.FROZEN,ah,ah1,BigDecimal.valueOf(250),0.2);
@@ -93,7 +93,7 @@ public class IHBankProjectApplication implements CommandLineRunner {
 		roleRepository.saveAll(List.of(adminRole,accountHolderRole,thirdPartyRole));
 
 
-		accountRepository.saveAll(List.of(chk,chk1,chk2,cd,cd1,sa,sa1,sa2,st,st1));
+		accountRepository.saveAll(List.of(chk,chk1,chk2,chk3,cd,cd1,sa,sa1,sa2,st,st1));
 	}
 
 }

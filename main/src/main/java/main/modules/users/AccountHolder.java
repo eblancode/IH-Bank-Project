@@ -2,6 +2,10 @@ package main.modules.users;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +20,8 @@ import java.util.List;
 @Entity
 @Getter @Setter @NoArgsConstructor
 public class AccountHolder extends User {
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate birthDate;
     @Embedded
@@ -42,19 +48,21 @@ public class AccountHolder extends User {
         this.mailingAddress = mailingAddress;
     }
 
-    public AccountHolder(LocalDate birthDate, Address address, Address mailingAddress) {
+    public AccountHolder(String userName, String password, String name, LocalDate birthDate, Address address, Address mailingAddress) {
+        super(userName, password, name);
         this.birthDate = birthDate;
         this.address = address;
         this.mailingAddress = mailingAddress;
     }
 
-    public AccountHolder(LocalDate birthDate, Address address) {
+    public AccountHolder(String userName, String password, LocalDate birthDate, Address address) {
+        super(userName, password);
         this.birthDate = birthDate;
         this.address = address;
     }
 
-    public AccountHolder(String userName, String password, LocalDate birthDate, Address address) {
-        super(userName, password);
+    public AccountHolder(String userName, String password, String name, LocalDate birthDate, Address address) {
+        super(userName, password, name);
         this.birthDate = birthDate;
         this.address = address;
     }

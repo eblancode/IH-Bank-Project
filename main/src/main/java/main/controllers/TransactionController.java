@@ -21,7 +21,7 @@ public class TransactionController {
     @PatchMapping("")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Transaction makeAccountTransfer(@AuthenticationPrincipal UserDetails userDetails, @RequestBody TransactionDTO transactionDTO){
-        // todo: EXTRA if transfer is succesful add Transfer to account list
+        // todo: EXTRA if transfer is successful add Transfer to account list
         //if (userDetails.getUsername().equals(transactionDTO.se))
         return transactionService.transfer(transactionDTO,userDetails.getUsername());
     }
@@ -29,7 +29,7 @@ public class TransactionController {
     @PatchMapping("/third-party")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Transaction makeThirdPartyAccountTransfer(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String tpHashedKey, @RequestParam String senderAccountSecretKey, @RequestBody TransactionDTO transactionDTO){
-        // todo: EXTRA if transfer is succesful add Transfer to account list
+        // todo: EXTRA if transfer is successful add Transfer to account list
         return transactionService.thirdPartyTransfer(transactionDTO,userDetails.getUsername(),tpHashedKey,senderAccountSecretKey);
         //localhost:8081/transfer/third-party?tpHashedKey=tp&accSecretKey=tp
         /*{

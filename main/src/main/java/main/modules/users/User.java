@@ -26,6 +26,7 @@ public abstract class User {
     private String userName;
     @NotNull
     private String password;
+    private String name;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Role> roles = new HashSet<>();
@@ -33,6 +34,12 @@ public abstract class User {
     public User(String userName, String password) {
         this.userName = userName;
         this.password = password;
+    }
+
+    public User(String userName, String password, String name) {
+        this.userName = userName;
+        this.password = password;
+        this.name = name;
     }
 
     public void addRoleToRoles(Role role) {

@@ -1,20 +1,26 @@
 package main.services.users;
 
-import main.modules.users.AccountHolder;
-import main.modules.users.User;
-import main.repositories.users.AccountHolderRepository;
+import main.modules.users.Admin;
+import main.repositories.users.AdminRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Service
 public class AdminService {
-    AccountHolderRepository accountHolderRepository;
+    @Autowired
+    AdminRepository adminRepository;
 
-    public List<User> getAllUsers(String userName) {
-        AccountHolder accountHolder = accountHolderRepository.findByUserName(userName)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-        return null;
+    public List<Admin> findAllAdmins() {
+        return adminRepository.findAll();
+    }
+
+    public Admin getAdminById(Long id) {
+        return adminRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin not found"));
     }
 
 }

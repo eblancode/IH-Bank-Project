@@ -2,6 +2,10 @@ package main.modules.accounts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +15,7 @@ import main.modules.Transaction;
 import main.modules.users.AccountHolder;
 import org.hibernate.annotations.DynamicUpdate;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,19 +32,20 @@ public abstract class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+    @NotNull
     private BigDecimal balance;
     private String secretKey;
     @Enumerated(EnumType.STRING)
     private Status status = Status.ACTIVE;
-    /*@JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)*/
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate creationDate = LocalDate.now();
     @ManyToOne
-    //todo: @NotNull ?
+    @NotNull
     private AccountHolder primaryOwner;
     @ManyToOne
-    private AccountHolder secondaryOwner;
+    private AccountHolder secondaryOwner = null;
     @OneToMany(mappedBy = "receiverAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Transaction> inboundTransactionList = new ArrayList<>();
@@ -53,6 +59,14 @@ public abstract class Account {
         this.status = status;
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;
+    }
+
+    public Account(BigDecimal balance, String secretKey, Status status, LocalDate creationDate, AccountHolder primaryOwner) {
+        this.balance = balance;
+        this.secretKey = secretKey;
+        this.status = status;
+        this.creationDate = creationDate;
+        this.primaryOwner = primaryOwner;
     }
 
     public BigDecimal checkAndGetBalance() {

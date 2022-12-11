@@ -1,26 +1,15 @@
 package main.controllers.users;
 
-import main.modules.users.User;
-import main.repositories.users.UserRepository;
-import main.services.users.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 /*@RestController
 @RequestMapping("/user")*/
 public class _UserController {
     /*@Autowired
-    UserRepository userRepository;*/
-    @Autowired
     UserService userService;
     @Autowired
-    UserRepository userRepository;
+    UserRepository userRepository;*/
 
     // ADMIN
-    @GetMapping("/all")
+    /*@GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public List<User> getAllUsers() {
         return userService.findAllUsers();
@@ -47,8 +36,6 @@ public class _UserController {
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public User updateUser(@RequestBody User user) {
-        /*if(userService.findUser(user.getId()).isPresent()) {
-        }*/
         System.err.println();
         if(userRepository.findById(user.getId()).isPresent()) {
             return userRepository.save(user);
@@ -58,26 +45,13 @@ public class _UserController {
 
     @PatchMapping("/user-name/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public User updateStatus(@PathVariable Long id, @RequestParam String name){
+    public User updateStatus(@PathVariable Long id, @RequestParam String userName){
         if(userRepository.findById(id).isPresent()){
             User user = userRepository.findById(id).get();
-            user.setUserName(name);
+            user.setUserName(userName);
             return userRepository.save(user);
         }
         return null;
-    }
+    }*/
 
 }
-
-/*{
-        "id": 1,
-            "name": "Eduard",
-            "birthDate": "1994-07-01",
-            "address": {
-        "street": "C/ calle, 123",
-                "postalCode": "08000",
-                "city": "Barcelona",
-                "country": "ES"
-    },
-        "mailingAddress": null
-    }*/

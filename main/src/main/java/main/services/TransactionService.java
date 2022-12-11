@@ -31,8 +31,11 @@ public class TransactionService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Sending account not found."));
 
         // Check if user is authorized by checking if it's either owner of the sender's account or admin
-        if(!userName.equals(sendingAccount.getPrimaryOwner().getUserName()) &&
+        /*if(!userName.equals(sendingAccount.getPrimaryOwner().getUserName()) &&
                 !userName.equals(sendingAccount.getSecondaryOwner().getUserName()) &&
+                !userName.equals("admin"))*/
+        if(!userName.equals(sendingAccount.getPrimaryOwner().getUserName()) &&
+            !userName.equals(sendingAccount.getSecondaryOwner().getUserName()) &&
                 !userName.equals("admin"))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User not authorized.");
 
