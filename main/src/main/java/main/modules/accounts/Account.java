@@ -1,7 +1,6 @@
 package main.modules.accounts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -11,15 +10,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import main.modules.Transaction;
 import main.modules.users.AccountHolder;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @DynamicUpdate
@@ -46,12 +42,6 @@ public abstract class Account {
     private AccountHolder primaryOwner;
     @ManyToOne
     private AccountHolder secondaryOwner = null;
-    @OneToMany(mappedBy = "receiverAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Transaction> inboundTransactionList = new ArrayList<>();
-    @OneToMany(mappedBy = "senderAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Transaction> outboundTransactionList = new ArrayList<>();
 
     public Account(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         this.balance = balance;
@@ -61,14 +51,14 @@ public abstract class Account {
         this.secondaryOwner = secondaryOwner;
     }
 
-    public Account(BigDecimal balance, String secretKey, Status status, LocalDate creationDate, AccountHolder primaryOwner) {
+    public Account(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner) {
         this.balance = balance;
         this.secretKey = secretKey;
         this.status = status;
-        this.creationDate = creationDate;
         this.primaryOwner = primaryOwner;
     }
 
+    // Method to check if interest rate applies and get balance afterwards
     public BigDecimal checkAndGetBalance() {
         if(this instanceof Savings ||
                 this instanceof Checking ||
@@ -78,6 +68,7 @@ public abstract class Account {
         return this.getBalance();
     }
 
+    // Method to check if interest rate or penalty fee applies and set balance afterwards
     public void checkAndSetBalance(BigDecimal balance) {
         // Check Interests/Fees
         if(this instanceof Savings ||
@@ -133,14 +124,6 @@ public abstract class Account {
 
     public void setSecondaryOwner(AccountHolder secondaryOwner) {
         this.secondaryOwner = secondaryOwner;
-    }
-
-    public void addInboundTransactionToList(Transaction inboundTransactionList) {
-        this.inboundTransactionList.add(inboundTransactionList);
-    }
-
-    public void addOutboundTransactionToList(Transaction outboundTransactionList) {
-        this.inboundTransactionList.add(outboundTransactionList);
     }
 
 }

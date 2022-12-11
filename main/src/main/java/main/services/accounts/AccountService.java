@@ -25,6 +25,7 @@ public class AccountService {
     @Autowired
     SavingsRepository savingsRepository;
 
+    // ACCOUNTS
     public List<Account> findAllAccounts() {
         return accountRepository.findAll();
     }
@@ -33,7 +34,6 @@ public class AccountService {
         return (Account) accountRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account does not exist."));
     }
-
 
     public void deleteAccount(Long id) {
         accountRepository.deleteAccount(id);
@@ -78,7 +78,7 @@ public class AccountService {
         return creditCardRepository.save(account);
     }
 
-    // SAVINGS ACCOUNTS
+    // SAVING ACCOUNTS
     public List<Savings> findAllSavingsAccounts() {
         return savingsRepository.findAll();
     }
@@ -89,9 +89,8 @@ public class AccountService {
 
         // Check if user is authorized
         if(!userName.equals(account.getPrimaryOwner().getUserName()) &&
-                !userName.equals("admin") ||
-                account.getSecondaryOwner().getUserName()!=null &&
-                !userName.equals(account.getSecondaryOwner().getUserName()))
+                !userName.equals(account.getSecondaryOwner().getUserName()) &&
+                !userName.equals("admin"))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User not authorized.");
 
 
@@ -101,4 +100,5 @@ public class AccountService {
     public Savings addSavingsAccount(Savings account) {
         return savingsRepository.save(account);
     }
+
 }

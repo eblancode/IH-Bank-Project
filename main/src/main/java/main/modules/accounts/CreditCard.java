@@ -28,11 +28,14 @@ public class CreditCard extends Account {
     private double interestRate = 0.2;
     private LocalDate lastDateInterestRateApplied = null;
 
-    //TODO: CHECK CONSTRAINTS IN SET METHODS
-
     public CreditCard(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
         // creditLimit and interestRate have default values
+    }
+
+    public CreditCard(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner) {
+        super(balance, secretKey, status, primaryOwner);
+        // creditLimit and interestRate have default values and there is no secondary owner
     }
 
     public CreditCard(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal creditLimit) {
@@ -51,10 +54,10 @@ public class CreditCard extends Account {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
         instantiateCreditLimit(creditLimit);
         instantiateInterestRate(interestRate);
-        /*this.creditLimit = creditLimit;
-        this.interestRate = interestRate;*/
     }
 
+    /*Called in constructor, checks if the value is in between minimum and maximum allowed values.
+    If the value provided is not in the range then sets it to the minimum/maximum value accordingly*/
     public void instantiateCreditLimit(BigDecimal creditLimit) {
         if(creditLimit.compareTo(MIN_CREDIT_LIMIT)<0||creditLimit.compareTo(MAX_CREDIT_LIMIT)>0) {
             if(creditLimit.compareTo(MIN_CREDIT_LIMIT)<0) setCreditLimit(MIN_CREDIT_LIMIT);
@@ -64,16 +67,18 @@ public class CreditCard extends Account {
         else setCreditLimit(creditLimit);
     }
 
+    /*Called in constructor, checks if the value is lower than the maximum allowed.
+    If the value provided is not in lower, then it sets to the maximum value*/
     public void instantiateInterestRate(double interestRate) {
         if (interestRate<MIN_INTEREST_RATE||interestRate>MAX_INTEREST_RATE) {
-            if(interestRate<MIN_INTEREST_RATE)
-                this.setInterestRate(MIN_INTEREST_RATE); //todo: check if this. necessary?
-            else this.setInterestRate(MAX_INTEREST_RATE);
+            if(interestRate<MIN_INTEREST_RATE) setInterestRate(MIN_INTEREST_RATE);
+            else setInterestRate(MAX_INTEREST_RATE);
             System.out.println("Interest rate for Credit Card got a default value due to constraints");
         }
-        else this.setInterestRate(interestRate);
+        else setInterestRate(interestRate);
     }
 
+    // Method to check interest rate and apply if proceeds
     protected void checkInterestRate(BigDecimal balance) {
         LocalDate now = LocalDate.now();
         int monthsDifference = Period.between(this.getLastDateInterestRateApplied(),
@@ -86,6 +91,7 @@ public class CreditCard extends Account {
         }
     }
 
+    // Apply interest rate
     private void addInterestRateAndSetBalance(BigDecimal balance, int monthsDifference, LocalDate now) {
         double monthlyInterest = interestRate/12;
         BigDecimal calculatedAmount = balance // CHECK IF OK

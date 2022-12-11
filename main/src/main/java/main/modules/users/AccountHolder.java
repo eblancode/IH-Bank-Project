@@ -41,24 +41,11 @@ public class AccountHolder extends User {
     @JsonIgnore
     private List<Account> secondaryAccountList = new ArrayList<>();
 
-    public AccountHolder(String userName, String password, LocalDate birthDate, Address address, Address mailingAddress) {
-        super(userName, password);
-        this.birthDate = birthDate;
-        this.address = address;
-        this.mailingAddress = mailingAddress;
-    }
-
     public AccountHolder(String userName, String password, String name, LocalDate birthDate, Address address, Address mailingAddress) {
         super(userName, password, name);
         this.birthDate = birthDate;
         this.address = address;
         this.mailingAddress = mailingAddress;
-    }
-
-    public AccountHolder(String userName, String password, LocalDate birthDate, Address address) {
-        super(userName, password);
-        this.birthDate = birthDate;
-        this.address = address;
     }
 
     public AccountHolder(String userName, String password, String name, LocalDate birthDate, Address address) {

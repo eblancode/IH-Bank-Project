@@ -24,4 +24,8 @@ public class Checking extends Account {
         super(balance, secretKey, status, primaryOwner, secondaryOwner);
     }
 
+    public Checking(BigDecimal balance, String secretKey, Status status, AccountHolder primaryOwner) {
+        super(balance, secretKey, status, primaryOwner);
+    }
+
 }

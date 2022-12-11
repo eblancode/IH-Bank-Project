@@ -73,7 +73,7 @@ public class UserTests {
     @WithMockUser(username = "admin", password = "1234", roles = "ADMIN")
     void shouldDeleteAccountHolder_whenDeleteIsPerformedByAnAdmin() throws Exception {
         String pwd = passwordEncoder.encode("1234");
-        AccountHolder accountHolder = new AccountHolder("tester",pwd, LocalDate.of(1994,07,01),null);
+        AccountHolder accountHolder = new AccountHolder("tester",pwd,"name",LocalDate.of(1994,07,01),null);
         userRepository.save(accountHolder);
         MvcResult result = mockMvc.perform(delete("/user/account_holder/delete/{id}",accountHolder.getId()))
                 .andDo(print())

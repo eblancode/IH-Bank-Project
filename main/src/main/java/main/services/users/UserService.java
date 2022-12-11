@@ -7,24 +7,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 @Service
 public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    public User findUserByUserName(String userName) {
+        return (User) userRepository.findByUserName(userName)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
+    }
+
+    /*
+    // UNUSED METHODS HAVE BEEN COMMENTED
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
     public User findUserById(Long id) {
         return (User) userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
-    }
-
-    public User findUserByUserName(String userName) {
-        return (User) userRepository.findByUserName(userName)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
     }
 
@@ -41,7 +41,6 @@ public class UserService {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                 "El id especificado no se encuentra en la base de datos");
-    }
-
+    }*/
 
 }

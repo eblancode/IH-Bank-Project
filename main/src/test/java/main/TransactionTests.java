@@ -10,7 +10,6 @@ import main.modules.users.ThirdParty;
 import main.modules.users.embedded.Address;
 import main.repositories.accounts.AccountRepository;
 import main.repositories.users.UserRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,21 +43,17 @@ public class TransactionTests {
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
-    @AfterEach
-    void tearDown() {
         userRepository.deleteAll();
         accountRepository.deleteAll();
     }
 
     @Test
-    @WithMockUser(username = "tester", password = "1234", roles = "ACCOUNT_HOLDER")
+    @WithMockUser(username = "tester1", password = "1234", roles = "ACCOUNT_HOLDER")
     void shouldMakeTransfer_whenAccountHolderPerformPatch() throws Exception {
         Address address = new Address("C/ Ironhack, 123","08000","Barcelona","ES");
-        AccountHolder accountHolder = new AccountHolder("tester","1234", LocalDate.of(1994,07,01),address);
-        AccountHolder accountHolder1 = new AccountHolder("tester1","1234", LocalDate.of(1994,07,01),address);
-        Savings savings = new Savings(BigDecimal.valueOf(1000),"secretKeyTester", Status.ACTIVE,accountHolder,accountHolder1,BigDecimal.valueOf(250),0.2);
+        AccountHolder accountHolder = new AccountHolder("tester1","1234","name", LocalDate.of(1994,07,01),address);
+        AccountHolder accountHolder1 = new AccountHolder("tester2","1234","name", LocalDate.of(1994,07,01),address);
+        Savings savings = new Savings(BigDecimal.valueOf(2000),"secretKeyTester", Status.ACTIVE,accountHolder,accountHolder1,BigDecimal.valueOf(250),0.2);
         Savings savings1 = new Savings(BigDecimal.valueOf(1000),"secretKeyTester1", Status.ACTIVE,accountHolder1,accountHolder,BigDecimal.valueOf(250),0.2);
         userRepository.saveAll(List.of(accountHolder,accountHolder1));
         accountRepository.saveAll(List.of(savings,savings1));
@@ -72,25 +67,25 @@ public class TransactionTests {
     }
 
     @Test
-    @WithMockUser(username = "tester", password = "1234", roles = "THIRD_PARTY")
+    @WithMockUser(username = "tester3", password = "1234", roles = "THIRD_PARTY")
     void shouldMakeTransfer_whenThirdPartyPerformPatch() throws Exception {
         Address address = new Address("C/ Ironhack, 123","08000","Barcelona","ES");
-        ThirdParty thirdParty = new ThirdParty("tester","1234","hashedKey");
-        AccountHolder accountHolder = new AccountHolder("tester1","1234", LocalDate.of(1994,07,01),address);
-        AccountHolder accountHolder1 = new AccountHolder("tester2","1234", LocalDate.of(1994,07,01),address);
-        Checking checking = new Checking(BigDecimal.valueOf(1000),"secretKeyTester", Status.ACTIVE,accountHolder,accountHolder1);
+        ThirdParty thirdParty = new ThirdParty("tester3","1234","name","hashedKey");
+        AccountHolder accountHolder = new AccountHolder("tester4","1234","name", LocalDate.of(1994,07,01),address);
+        AccountHolder accountHolder1 = new AccountHolder("tester5","1234","name", LocalDate.of(1994,07,01),address);
+        Checking checking = new Checking(BigDecimal.valueOf(250),"secretKeyTester", Status.ACTIVE,accountHolder,accountHolder1);
         Savings savings = new Savings(BigDecimal.valueOf(1000),"secretKeyTester1", Status.ACTIVE,accountHolder1,accountHolder,BigDecimal.valueOf(250),0.2);
         userRepository.saveAll(List.of(thirdParty,accountHolder,accountHolder1));
         accountRepository.saveAll(List.of(checking,savings));
 
-        TransactionDTO transactionDTO = new TransactionDTO(checking.getId(),savings.getId(),BigDecimal.valueOf(500.01));
+        TransactionDTO transactionDTO = new TransactionDTO(checking.getId(),savings.getId(),BigDecimal.valueOf(25));
 
         String body = objectMapper.writeValueAsString(transactionDTO);
         MvcResult result = mockMvc.perform(
                 patch("/transfer/third-party?tpHashedKey=" + thirdParty.getHashedKey() +
                         "&senderAccountSecretKey=" + checking.getSecretKey()).content(body)
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isAccepted()).andReturn();
-        assertTrue(result.getResponse().getContentAsString().contains(":500.01"));
+        assertTrue(result.getResponse().getContentAsString().contains(":25"));
     }
 
 }

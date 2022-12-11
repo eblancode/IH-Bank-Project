@@ -29,7 +29,6 @@ public class TransactionController {
     @PatchMapping("/third-party")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Transaction makeThirdPartyAccountTransfer(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String tpHashedKey, @RequestParam String senderAccountSecretKey, @RequestBody TransactionDTO transactionDTO){
-        // todo: EXTRA if transfer is successful add Transfer to account list
         return transactionService.thirdPartyTransfer(transactionDTO,userDetails.getUsername(),tpHashedKey,senderAccountSecretKey);
         //localhost:8081/transfer/third-party?tpHashedKey=tp&accSecretKey=tp
         /*{

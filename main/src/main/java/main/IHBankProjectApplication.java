@@ -53,18 +53,18 @@ public class IHBankProjectApplication implements CommandLineRunner {
 		Address addr2 = new Address("C/ Barcelona, 123","08002","Barcelona","ES");
 		Address addr3 = new Address("C/ Bcn, 123","08003","Barcelona","ES");
 
-		Admin admin = new Admin("admin",passwordEncoder.encode("1234"));
+		Admin admin = new Admin("admin",passwordEncoder.encode("1234"),"name");
 		Role adminRole = new Role("ADMIN",admin);
 
 		String pwd = passwordEncoder.encode("1234");
-		AccountHolder ah = new AccountHolder("eduard",pwd, LocalDate.of(1994,07,01),addr);
-		AccountHolder ah1 = new AccountHolder("Holder A",pwd, LocalDate.of(2000,01,01),addr1);
-		AccountHolder ah2 = new AccountHolder("Holder B",pwd, LocalDate.of(2001,01,01),addr2);
-		AccountHolder ah3 = new AccountHolder("Holder C",passwordEncoder.encode("1234"), LocalDate.of(2002,01,01),addr3);
-		AccountHolder ah4 = new AccountHolder("Hodler",passwordEncoder.encode("1234"), LocalDate.of(1899,01,01),addr3);
+		AccountHolder ah = new AccountHolder("eduard",pwd,"name",LocalDate.of(1994,07,01),addr);
+		AccountHolder ah1 = new AccountHolder("Holder A",pwd,"name",LocalDate.of(2000,01,01),addr1);
+		AccountHolder ah2 = new AccountHolder("Holder B",pwd,"name",LocalDate.of(2001,01,01),addr2);
+		AccountHolder ah3 = new AccountHolder("Holder C",passwordEncoder.encode("1234"),"name",LocalDate.of(2002,01,01),addr3);
+		AccountHolder ah4 = new AccountHolder("Hodler",passwordEncoder.encode("1234"),"name",LocalDate.of(1899,01,01),addr3);
 		Role accountHolderRole = new Role("ACCOUNT_HOLDER",ah);
 
-		ThirdParty tp = new ThirdParty("tp",passwordEncoder.encode("1234"),"hashedkey");
+		ThirdParty tp = new ThirdParty("tp",passwordEncoder.encode("1234"),"name","hashedkey");
 		Role thirdPartyRole = new Role("THIRD_PARTY",tp);
 
 		Checking chk = new Checking(BigDecimal.valueOf(2000),"secretkey123", Status.ACTIVE,ah,ah1);

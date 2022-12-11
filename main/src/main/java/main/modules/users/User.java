@@ -24,17 +24,11 @@ public abstract class User {
     @NotNull
     @Column(unique=true)
     private String userName;
-    @NotNull
     private String password;
     private String name;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Role> roles = new HashSet<>();
-
-    public User(String userName, String password) {
-        this.userName = userName;
-        this.password = password;
-    }
 
     public User(String userName, String password, String name) {
         this.userName = userName;

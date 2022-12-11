@@ -26,14 +26,10 @@ public class TransactionService {
 
     public Transaction transfer(TransactionDTO transactionDTO, String userName) {
         // Check if sender account exist
-        //Account sendingAccount = accountService.findAccount(transactionDTO.getAccountSenderId()); todo: implement in accountservice?
         Account sendingAccount = accountRepository.findById(transactionDTO.getAccountSenderId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Sending account not found."));
 
         // Check if user is authorized by checking if it's either owner of the sender's account or admin
-        /*if(!userName.equals(sendingAccount.getPrimaryOwner().getUserName()) &&
-                !userName.equals(sendingAccount.getSecondaryOwner().getUserName()) &&
-                !userName.equals("admin"))*/
         if(!userName.equals(sendingAccount.getPrimaryOwner().getUserName()) &&
             !userName.equals(sendingAccount.getSecondaryOwner().getUserName()) &&
                 !userName.equals("admin"))

@@ -71,8 +71,8 @@ public class AccountTests {
         Address address = new Address("C/ Ironhack, 123","08000","Barcelona","ES");
         Address address1 = new Address("C/ Calle, 123","08001","Barcelona","ES");
 
-        AccountHolder accountHolder = new AccountHolder("tester1",pwd, LocalDate.of(1994,07,01),address);
-        AccountHolder accountHolder1 = new AccountHolder("tester2",pwd, LocalDate.of(2000,01,01),address1);
+        AccountHolder accountHolder = new AccountHolder("tester1",pwd,"name",LocalDate.of(1994,07,01),address);
+        AccountHolder accountHolder1 = new AccountHolder("tester2",pwd,"name",LocalDate.of(2000,01,01),address1);
         userRepository.save(accountHolder);
         userRepository.save(accountHolder1);
 
@@ -100,7 +100,7 @@ public class AccountTests {
     @WithMockUser(username = "tester1", password = "1234", roles = "ACCOUNT_HOLDER")
     void shouldGetAccountBalance_whenAccountHolderPerformGetToTheirAccount() throws Exception {
         Address address = new Address("C/ Ironhack, 123","08000","Barcelona","ES");
-        AccountHolder accountHolder = new AccountHolder("tester1","1234", LocalDate.of(1994,07,01),address);
+        AccountHolder accountHolder = new AccountHolder("tester1","1234","name",LocalDate.of(1994,07,01),address);
         Savings savings = new Savings(BigDecimal.valueOf(1000),"secretKeyTester4",Status.ACTIVE,accountHolder,accountHolder,BigDecimal.valueOf(250),0.2);
         userRepository.save(accountHolder);
         accountService.saveAccount(savings);
@@ -116,7 +116,7 @@ public class AccountTests {
     @WithMockUser(username = "admin", password = "1234", roles = "ADMIN")
     void shouldUpdateNewAccountBalance_whenAdminUserPerformPatch() throws Exception {
         Address address = new Address("C/ Ironhack, 123","08000","Barcelona","ES");
-        AccountHolder accountHolder = new AccountHolder("tester1","1234", LocalDate.of(1994,07,01),address);
+        AccountHolder accountHolder = new AccountHolder("tester1","1234","name",LocalDate.of(1994,07,01),address);
         Savings savings = new Savings(BigDecimal.valueOf(1000),"secretKeyTester4",Status.ACTIVE,accountHolder,null,BigDecimal.valueOf(250),0.2);
         userRepository.save(accountHolder);
         accountService.saveAccount(savings);
@@ -131,7 +131,7 @@ public class AccountTests {
     @WithMockUser(username = "admin", password = "1234", roles = "ADMIN")
     void shouldDeleteNewAccount_whenAdminUserPerformDeletion() throws Exception {
         Address address = new Address("C/ Ironhack, 123","08000","Barcelona","ES");
-        AccountHolder accountHolder = new AccountHolder("tester1","1234", LocalDate.of(1994,07,01),address);
+        AccountHolder accountHolder = new AccountHolder("tester1","1234","name",LocalDate.of(1994,07,01),address);
         Savings savings = new Savings(BigDecimal.valueOf(1000),"secretKeyTester4",Status.ACTIVE,accountHolder,null,BigDecimal.valueOf(250),0.2);
         userRepository.save(accountHolder);
         accountService.saveAccount(savings);

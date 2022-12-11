@@ -10,11 +10,6 @@ import lombok.Setter;
 public class ThirdParty extends User {
     private String hashedKey;
 
-    public ThirdParty(String userName, String password, String hashedKey) {
-        super(userName, password);
-        this.hashedKey = hashedKey;
-    }
-
     public ThirdParty(String userName, String password, String name, String hashedKey) {
         super(userName, password, name);
         this.hashedKey = hashedKey;
