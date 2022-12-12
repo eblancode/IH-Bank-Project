@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import main.modules.users.AccountHolder;
 import main.modules.users.ThirdParty;
 import main.repositories.users.UserRepository;
-import main.services.users.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,27 +19,25 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class UserTests {
+public class UserControllerTests {
     @Autowired
     private WebApplicationContext webApplicationContext;
     @Autowired
     PasswordEncoder passwordEncoder;
-    @Autowired
-    UserService userService;
     @Autowired
     UserRepository userRepository;
 
     private MockMvc mockMvc;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-//    private final String pwd = passwordEncoder.encode("1234");
 
     @BeforeEach
     void setUp(){

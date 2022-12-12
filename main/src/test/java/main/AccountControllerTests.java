@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class AccountTests {
+public class AccountControllerTests {
     @Autowired
     private WebApplicationContext webApplicationContext;
     @Autowired

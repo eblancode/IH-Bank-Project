@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class TransactionTests {
+public class TransactionControllerTests {
     @Autowired
     private WebApplicationContext webApplicationContext;
     @Autowired
