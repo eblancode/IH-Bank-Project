@@ -29,7 +29,7 @@ The application allows users to do certain operations depending on their roles w
 
 ## REQUIREMENTS
 
-## ACCOUNTS
+### ACCOUNTS
 Checking Accounts should have:
 * A balance
 * A secretKey
@@ -60,7 +60,7 @@ CreditCard Accounts have:
 * An interestRate
 * A penaltyFee
 
-## USERS
+### USERS
 
 AccountHolders
 The AccountHolders should be able to access their own accounts and only their accounts when passing the correct credentials using Basic Auth. AccountHolders have:
@@ -75,7 +75,7 @@ Admins only have a name.
 ThirdParty
 The ThirdParty Accounts have a hashed key and a name.
 
-## ADMINS CAN CREATE ACCOUNTS WHICH MUST HAVE THE FOLLOWING REQUIREMENTS
+### ADMINS CAN CREATE ACCOUNTS WHICH MUST HAVE THE FOLLOWING REQUIREMENTS
 Savings
 * have a default interest rate of 0.0025
 * may be instantiated with an interest rate other than the default, with a maximum interest rate of 0.5
@@ -90,7 +90,7 @@ CheckingAccounts
 * When creating a new Checking account, if the primaryOwner is less than 24, a StudentChecking account should be created otherwise a regular Checking Account should be created.
 * should have a minimumBalance of 250 and a monthlyMaintenanceFee of 12
 
-## INTEREST AND FEES FUNCTIONALITIES
+### INTEREST AND FEES FUNCTIONALITIES
 Interest and Fees should be applied appropriately.
 
 ### PenaltyFee
@@ -101,7 +101,7 @@ Interest and Fees should be applied appropriately.
 * Interest on savings accounts is added to the account annually at the rate of specified interestRate per year. That means that if I have 1000000 in a savings account with a 0.01 interest rate, 1% of 1 Million is added to my account after 1 year. When a savings account balance is accessed, you must determine if it has been 1 year or more since either the account was created or since interest was added to the account, and add the appropriate interest to the balance if necessary.
 * Interest on credit cards is added to the balance monthly. If you have a 12% interest rate (0.12) then 1% interest will be added to the account monthly. When the balance of a credit card is accessed, check to determine if it has been 1 month or more since the account was created or since interest was added, and if so, add the appropriate interest to the balance.
 
-## ACCOUNT ACCESS
+### ACCOUNT ACCESS
 Admins
 * Admins should be able to access the balance for any account and to modify it.
 
@@ -114,7 +114,7 @@ Third-Party Users
 * Third-party users must be added to the database by an admin.
 * In order to receive and send money, Third-Party Users must provide their hashed key in the header of the HTTP request. They also must provide the amount, the Account id and the account secret key.
 
-## Extra
+### Extra
 Implemented for a better ease-of-use and more accurate simulator
 
 * Unique username and password fields have been implemented in User class to make it easier to work with security authentification.
