@@ -123,7 +123,9 @@ Third-Party Users
 Implemented for a better ease-of-use and more accurate simulator
 
 * Unique username and password fields have been implemented in User class to make it easier to work with security authentification.
-* Inbound/Outbound transaction list have been implemented in Account class to keep it record of the transactions made
-* Fees and Interest methods have been implemented in Account class as a requirement of the same and for a better ease-of-use
+* Inbound/Outbound transaction list have been implemented in Account class to keep it record of the transactions made.
+* Fees and Interest methods have been implemented in Account class as a requirement of the same and for a better ease-of-use.
+* Routes have been secured so that admin can access to every route and other users have just certain route permissions.
+* Controllers and services have been set up so that admin can use every functionality created in the controller and other users are subject to check its permissions first.
 
 
