@@ -18,10 +18,15 @@ The application allows users to do certain operations depending on their roles w
 * Admin
 
 ### Transaction
+* Transaction
 
 ### Security
+* Role
+* CustomUserDetails
+* SecurityConfiguration
 
 ### Tests
+* Controllers tests
 
 <img width="226" alt="image" src="https://user-images.githubusercontent.com/16917316/207006509-19c1a130-7c5c-4e0c-9fcc-824173bd8f85.png">
 <img width="251" alt="image" src="https://user-images.githubusercontent.com/16917316/207006633-a8b7c776-955c-46d0-99d6-5e4a4bc92095.png">
