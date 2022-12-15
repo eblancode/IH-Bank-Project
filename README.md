@@ -10,6 +10,7 @@ The application allows users to do certain operations depending on their roles w
 ### Account
 * Checking
 * Savings
+* Credit card
 * Student Checking
 
 ### Users
@@ -129,7 +130,22 @@ Third-Party Users
 * APIs functionalities are defined in "Controllers" folder where you can see all the available routes and their request type.
 * Roles and permissions are defined in "SecurityConfiguration.java" located into "security" folder.
 
-You can either create java objects in the application itself following the introduced code in main or perform API requests to make changes on the DB to test the its functionality.
+You can either create java objects in the application itself following the introduced code in main or perform API requests to make changes on the DB to test its functionality.
+Routes are the following, starting with "localhost:8081/"
+  * account/checking/add
+  * account/credit-card/add
+  * account/savings/add
+  * account/get_balance/{id}
+  * account/update_balance/{id}?balance=100
+  * account/delete/{id}
+  * transfer
+  * transfer/third-party?tpHashedKey={hashKey}?senderAccountSecretKey={secretKey}
+  * user/third-party/add
+  * user/account_holder/delete/{id}
+
+* All add routes (post requests) require a .json type body wich can be easiy provided by loging in with an admin and perform a get request of an specified account type.
+* Get and delete routes just require a logged in user and an id.
+* Patch requests require a parameters for update_balance and third-party transaction and a body for transaction and third-party transaction too
 
 ### EXTRA
 Implemented for a better ease-of-use and more accurate simulator
