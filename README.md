@@ -143,9 +143,9 @@ Routes are the following, starting with "localhost:8081/"
   * user/third-party/add
   * user/account_holder/delete/{id}
 
-* All add routes (post requests) require a .json type body wich can be easiy provided by loging in with an admin and perform a get request of an specified account type.
-* Get and delete routes just require a logged in user and an id.
-* Patch requests require a parameters for update_balance and third-party transaction and a body for transaction and third-party transaction too
+All add routes (post requests) require a .json type body wich can be easiy provided by loging in with an admin and perform a get request of an specified account type.<br>
+Get and delete routes just require a logged in user and an id.<br>
+Patch requests require a parameters for update_balance and third-party transaction and a body for transaction and third-party transaction too.
 
 ### EXTRA
 Implemented for a better ease-of-use and more accurate simulator
