@@ -32,7 +32,7 @@ public class AccountService {
 
     public Account findAccount(Long id) {
         return (Account) accountRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account does not exist."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account does not exist"));
     }
 
     public void deleteAccount(Long id) {
@@ -91,7 +91,7 @@ public class AccountService {
         if(!userName.equals(account.getPrimaryOwner().getUserName()) &&
                 !userName.equals(account.getSecondaryOwner().getUserName()) &&
                 !userName.equals("admin"))
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User not authorized.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User not authorized");
 
 
         return account.getBalance().toString();

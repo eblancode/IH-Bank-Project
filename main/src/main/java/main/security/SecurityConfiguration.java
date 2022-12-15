@@ -26,6 +26,7 @@ public class SecurityConfiguration {
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.httpBasic();
+        // Route permissions are defined here
         httpSecurity.authorizeHttpRequests()
                 .requestMatchers(HttpMethod.GET, "/account/get_balance/**").hasAnyRole("ACCOUNT_HOLDER","ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/transfer").hasAnyRole("ACCOUNT_HOLDER","ADMIN")

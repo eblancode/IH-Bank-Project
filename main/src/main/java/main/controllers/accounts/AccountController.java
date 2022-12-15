@@ -126,23 +126,3 @@ public class AccountController {
     }
 
 }
-
-/*{
-    "id": 4,
-        "balance": 200.00,
-        "secretKey": "secretkey2134",
-        "status": "ACTIVE",
-        "creationDate": "2022-12-08",
-        "primaryOwner": {
-    "id": 1,
-            "name": "Eduard",
-            "birthDate": "1994-07-01",
-            "address": {
-        "street": "C/ calle, 123",
-                "postalCode": "08000",
-                "city": "Barcelona",
-                "country": "ES"
-        },
-        "mailingAddress": null
-    }
-}*/

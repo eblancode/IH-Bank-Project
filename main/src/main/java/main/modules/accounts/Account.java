@@ -45,7 +45,7 @@ public abstract class Account {
     @NotNull
     private AccountHolder primaryOwner;
     @ManyToOne
-    private AccountHolder secondaryOwner = null;
+    private AccountHolder secondaryOwner;
     @OneToMany(mappedBy = "receiverAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Transaction> inboundTransactionList = new ArrayList<>();
@@ -89,6 +89,8 @@ public abstract class Account {
         else this.setBalance(balance);
     }
 
+    // Method called in the class, used merely as an intermediary. Checks the caller method and applies
+    // specific functionalities accordingly
     private void checkBalance(BigDecimal balance) {
         String callerMethod = Thread.currentThread().getStackTrace()[2].getMethodName();
         if(this instanceof Savings || this instanceof Checking) {
@@ -105,7 +107,7 @@ public abstract class Account {
                 } //todo: check setbalance x2
                 return;
             }
-            else if (this instanceof Checking checkingAccount) { //todo: Done for Aliases, OK?
+            else if (this instanceof Checking checkingAccount) { //todo: Done for Aliases
                 // Check/Apply penalty fee if balance is due to change
                 if(!callerMethod.equals("checkAndGetBalance"))
                     if (checkingAccount.getMinimumBalance().compareTo(balance) > 0) {

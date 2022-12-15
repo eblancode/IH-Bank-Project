@@ -54,8 +54,8 @@ public class Savings extends Account {
         instantiateInterestRate(interestRate);
     }
 
-    /*Called in constructor, checks if the value is in between minimum and maximum allowed values.
-    If the value provided is not in the range then sets it to the minimum/maximum value accordingly*/
+    // Called in constructor, checks if the value is in between minimum and maximum allowed values.
+    // If the value provided is not in the range then sets it to the minimum/maximum value accordingly
     public void instantiateMinimumBalance(BigDecimal minimumBalance) {
         if(minimumBalance.compareTo(MIN_MINIMUM_BALANCE)<0||minimumBalance.compareTo(MAX_MINIMUM_BALANCE)>0) {
             if(minimumBalance.compareTo(MIN_MINIMUM_BALANCE)<0) setMinimumBalance(MIN_MINIMUM_BALANCE);
@@ -65,8 +65,8 @@ public class Savings extends Account {
         else setMinimumBalance(minimumBalance);
     }
 
-    /*Called in constructor, checks if the value is lower than the maximum allowed.
-    If the value provided is not lower, then it sets to the maximum value*/
+    // Called in constructor, checks if the value is lower than the maximum allowed.
+    // If the value provided is not lower, then it sets to the maximum value
     public void instantiateInterestRate(double interestRate) {
         this.interestRate = Math.min(interestRate, MAX_INTEREST_RATE);
         if(this.interestRate==MAX_INTEREST_RATE)

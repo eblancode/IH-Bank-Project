@@ -69,7 +69,7 @@ public class AccountControllerTests {
     void shouldAddNewAccount_whenAdminUserPerformPost() throws Exception {
         String pwd = passwordEncoder.encode("1234");
         Address address = new Address("C/ Ironhack, 123","08000","Barcelona","ES");
-        Address address1 = new Address("C/ Calle, 123","08001","Barcelona","ES");
+        Address address1 = new Address("C/ Ironhack, 321","08001","Barcelona","ES");
 
         AccountHolder accountHolder = new AccountHolder("tester1",pwd,"name",LocalDate.of(1994,07,01),address);
         AccountHolder accountHolder1 = new AccountHolder("tester2",pwd,"name",LocalDate.of(2000,01,01),address1);

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
+
+    // This allows an account holder to be deleted
     @Modifying
     @Transactional
     @Query("delete from Account where id=:id")

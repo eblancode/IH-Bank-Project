@@ -21,7 +21,7 @@ public class CustomerUserDetailsService implements UserDetailsService {
         Optional<User> user = userRepository.findByUserName(username);
 
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException("El usuario no existe");
+            throw new UsernameNotFoundException("User does not exists");
         }
 
         return new CustomUserDetails(user.get());
