@@ -119,7 +119,19 @@ Third-Party Users
 * Third-party users must be added to the database by an admin.
 * In order to receive and send money, Third-Party Users must provide their hashed key in the header of the HTTP request. They also must provide the amount, the Account id and the account secret key.
 
-### Extra
+## SETUP
+1. Install a MySQL Server database.
+2. Run the following command to create the application schema database: "CREATE SCHEMA ih_bank_project;"
+3. Uncomment method "temporarySetUp()" on main to test DB and API functionality.
+4. Install an API platfrom such as "Postman" to test API functionalities.
+
+## FUNCTIONALITY
+* APIs functionalities are defined in "Controllers" folder where you can see all the available routes and their request type.
+* Roles and permissions are defined in "SecurityConfiguration.java" located into "security" folder.
+
+You can either create java objects in the application itself following the introduced code in main or perform API requests to make changes on the DB to test the its functionality.
+
+### EXTRA
 Implemented for a better ease-of-use and more accurate simulator
 
 * Unique username and password fields have been implemented in User class to make it easier to work with security authentification.
